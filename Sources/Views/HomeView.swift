@@ -16,3 +16,12 @@ struct HomeView: View {
       }
   }
 }
+
+#Preview {
+  HomeView(
+    store: .init(
+      initialState: HomeFeature.State(),
+      reducer: { HomeFeature()
+      })
+  )
+}
