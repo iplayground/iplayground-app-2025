@@ -10,7 +10,17 @@ struct HomeView: View {
   }
 
   var body: some View {
-    Text("Home")
+    TabView {
+      Text("Sessions")
+        .tabItem{ Label("Sessions", systemImage: "calendar") }
+
+      Text("Sponsors")
+        .tabItem { Label("Sponsors", systemImage: "building.2.fill") }
+
+      // TODO: More tabs
+      // My
+      // About
+    }
       .task {
         await store.send(.task).finish()
       }
