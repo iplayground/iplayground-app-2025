@@ -7,6 +7,13 @@ let appName = "App"
 
 // MARK: - Third party dependencies
 
+let sessionData = SourceControlDependency(
+  package: .package(
+    url: "https://github.com/iplayground/SessionData",
+    exact: "2025.0.0"
+  ),
+  productName: "SessionData"
+)
 let tca = SourceControlDependency(
   package: .package(
     url: "https://github.com/pointfreeco/swift-composable-architecture",
@@ -31,7 +38,9 @@ let dependenciesMacros = SourceControlDependency(
 
 let models = SingleTargetLibrary(
   name: "Models",
-  dependencies: []
+  dependencies: [
+    sessionData.targetDependency
+  ]
 )
 let dependencyClients = SingleTargetLibrary(
   name: "DependencyClients",
@@ -93,6 +102,7 @@ let package = Package(
   dependencies: [
     tca.package,
     swiftDependencies,
+    sessionData.package,
   ],
   targets: [
     dependencyClients.target,

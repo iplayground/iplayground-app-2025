@@ -1,6 +1,7 @@
 import Foundation
+@_exported import SessionData
 
-package struct Session: Identifiable {
+package struct SessionWrapper: Identifiable {
   package let id = UUID()
   package let timeRange: String
   package let title: String
@@ -20,5 +21,13 @@ package struct Session: Identifiable {
     self.speaker = speaker
     self.tags = tags
     self.description = description
+  }
+
+  package init(session: Session) {
+    self.timeRange = session.time
+    self.title = session.title
+    self.speaker = session.speaker
+    self.tags = session.tags.isEmpty ? nil : session.tags.joined(separator: " · ")
+    self.description = session.description.isEmpty ? nil : session.description
   }
 }

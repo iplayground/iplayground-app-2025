@@ -11,6 +11,15 @@
       }
     },
     {
+      "identity" : "sessiondata",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iplayground/SessionData",
+      "state" : {
+        "revision" : "fd4e4eb7557b701c43594551f95deab98a3f5c3e",
+        "version" : "2025.0.0"
+      }
+    },
+    {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
