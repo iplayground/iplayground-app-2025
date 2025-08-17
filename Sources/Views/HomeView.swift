@@ -11,19 +11,34 @@ struct HomeView: View {
 
   var body: some View {
     TabView {
-      Text("Sessions")
-        .tabItem{ Label("Sessions", systemImage: "calendar") }
+      // Tab 1: Today
+      SessionsView(
+        store: .init(
+          initialState: SessionsFeature.State(),
+          reducer: { SessionsFeature() }
+        )
+      )
+      .tabItem { Label("Today", systemImage: "calendar") }
 
+      // Tab 2: Sponsors, Speakers, & Staff
       Text("Sponsors")
-        .tabItem { Label("Sponsors", systemImage: "building.2.fill") }
+        .tabItem { Label("Community", systemImage: "person.3") }
 
-      // TODO: More tabs
-      // My
-      // About
+      // Tab 3: Flitto (Live Translation)
+      Text("Flitto")
+        .tabItem { Label("Flitto", systemImage: "globe") }
+
+      // Tab 4: My
+      Text("My")
+        .tabItem { Label("My", systemImage: "bookmark") }
+
+      // Tab 5: About
+      Text("About")
+        .tabItem { Label("About", systemImage: "info.circle") }
     }
-      .task {
-        await store.send(.task).finish()
-      }
+    .task {
+      await store.send(.task).finish()
+    }
   }
 }
 
@@ -31,7 +46,8 @@ struct HomeView: View {
   HomeView(
     store: .init(
       initialState: HomeFeature.State(),
-      reducer: { HomeFeature()
+      reducer: {
+        HomeFeature()
       })
   )
 }
