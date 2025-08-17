@@ -12,10 +12,10 @@ struct HomeView: View {
   var body: some View {
     TabView {
       // Tab 1: Today
-      SessionsView(
+      TodayView(
         store: .init(
-          initialState: SessionsFeature.State(),
-          reducer: { SessionsFeature() }
+          initialState: TodayFeature.State(),
+          reducer: { TodayFeature() }
         )
       )
       .tabItem { Label("Today", systemImage: "calendar") }

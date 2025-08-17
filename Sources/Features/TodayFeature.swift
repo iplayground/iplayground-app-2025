@@ -2,11 +2,19 @@ import ComposableArchitecture
 import SessionData
 
 @Reducer
-package struct SessionsFeature {
+package struct TodayFeature {
   @ObservableState
   package struct State: Equatable {
     package var day1Sessions: [Session] = []
     package var day2Sessions: [Session] = []
+    package var selectedDay: Day = .day1
+
+    package enum Day: Int, CaseIterable, Identifiable {
+      case day1 = 1
+      case day2 = 2
+
+      package var id: Int { rawValue }
+    }
 
     package init() {}
   }

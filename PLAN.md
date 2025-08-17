@@ -87,13 +87,13 @@
 iPlayground App 2025
 - AppView & AppFeature (主要 App 結構)
   - TabView 主導航
-    - 📅 Tab 1: Today
-      - NowView & NowFeature
+    - 📅 Tab 1: Today & TodayFeature
+      - Now Section
         - 即時資訊區塊 
           - ⏰ 倒數計時 (CountdownView)
           - 📍 當前議程 (CurrentSessionView)
           - ⏭️ 下個議程 (NextSessionView)
-      - ScheduleView & ScheduleFeature
+      - Sessions Section
         - 議程列表
           - 📋 兩天列表 (SessionListView)
           - 📄 詳細頁面 (SessionDetailView & SessionDetailFeature)
