@@ -1,7 +1,7 @@
 import Foundation
 @_exported import SessionData
 
-package struct SessionWrapper: Identifiable {
+package struct SessionWrapper: Identifiable, Equatable {
   package let id = UUID()
   package let timeRange: String
   package let dateInterval: DateInterval?

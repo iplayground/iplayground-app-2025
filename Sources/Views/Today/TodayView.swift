@@ -52,16 +52,7 @@ struct TodayView: View {
 
   @ViewBuilder
   private var sessionList: some View {
-    let sessions: [SessionWrapper] = {
-      switch store.selectedDay {
-      case .day1:
-        return store.day1Sessions.map { SessionWrapper(session: $0) }
-      case .day2:
-        return store.day2Sessions.map { SessionWrapper(session: $0) }
-      }
-    }()
-
-    ForEach(sessions) { session in
+    ForEach(store.currentSessions) { session in
       sessionCell(session)
     }
   }
