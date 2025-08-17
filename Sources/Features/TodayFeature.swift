@@ -11,11 +11,34 @@ package struct TodayFeature {
     package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
 
+    package var allSessions: [SessionWrapper] {
+      day1Sessions + day2Sessions
+    }
+
     package var currentSessions: [SessionWrapper] {
       switch selectedDay {
       case .day1: return day1Sessions
       case .day2: return day2Sessions
       }
+    }
+
+    package var currentSession: SessionWrapper? {
+      @Dependency(\.date.now) var now
+      return allSessions.first { $0.dateInterval?.contains(now) ?? false }
+    }
+
+    package var nextSession: SessionWrapper? {
+      guard let date = currentSession?.dateInterval?.end else {
+        return nil
+      }
+      return allSessions.first { $0.dateInterval?.start ?? .distantFuture >= date }
+    }
+
+    package var nextNextSession: SessionWrapper? {
+      guard let date = nextSession?.dateInterval?.end else {
+        return nil
+      }
+      return allSessions.first { $0.dateInterval?.start ?? .distantFuture >= date }
     }
 
     package enum Day: Int, CaseIterable, Identifiable {
@@ -31,6 +54,7 @@ package struct TodayFeature {
   package enum Action: Equatable, BindableAction {
     case binding(BindingAction<State>)
     case task
+    case tapNowSection
   }
 
   package init() {}
@@ -64,6 +88,17 @@ package struct TodayFeature {
           }
         }
       }
+
+    case .tapNowSection:
+      if let currentSession = state.currentSession {
+        if let day1Session = state.day1Sessions.first(where: { $0.id == currentSession.id }) {
+          state.selectedDay = .day1
+        } else if let day2Session = state.day2Sessions.first(where: { $0.id == currentSession.id })
+        {
+          state.selectedDay = .day2
+        }
+      }
+      return .none
     }
   }
 

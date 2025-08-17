@@ -42,12 +42,66 @@ struct HomeView: View {
   }
 }
 
-#Preview {
+#Preview("活動前") {
+  let _ = prepareDependencies {
+    $0.date.now = {
+      let date = Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 29, hour: 9, minute: 0))!
+      return date
+    }()
+  }
   HomeView(
     store: .init(
       initialState: HomeFeature.State(),
-      reducer: {
-        HomeFeature()
-      })
+      reducer: { HomeFeature() }
+    )
+  )
+}
+
+#Preview("活動中 - Day 1") {
+  let _ = prepareDependencies {
+    $0.date.now = {
+      let date = Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 30, hour: 9, minute: 35))!
+      return date
+    }()
+  }
+  HomeView(
+    store: .init(
+      initialState: HomeFeature.State(),
+      reducer: { HomeFeature() }
+    )
+  )
+}
+
+#Preview("活動中 - Day 2") {
+  let _ = prepareDependencies {
+    $0.date.now = {
+      let date = Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 31, hour: 17, minute: 10))!
+      return date
+    }()
+  }
+  HomeView(
+    store: .init(
+      initialState: HomeFeature.State(),
+      reducer: { HomeFeature() }
+    )
+  )
+}
+
+#Preview("活動結束後") {
+  let _ = prepareDependencies {
+    $0.date.now = {
+      let date = Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 31, hour: 18, minute: 0))!
+      return date
+    }()
+  }
+  HomeView(
+    store: .init(
+      initialState: HomeFeature.State(),
+      reducer: { HomeFeature() }
+    )
   )
 }
