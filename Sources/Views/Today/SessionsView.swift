@@ -5,21 +5,16 @@ import SwiftUI
 
 struct SessionsView: View {
   let store: StoreOf<SessionsFeature>
-  @State private var sessions: [SessionWrapper] = []
 
   var body: some View {
-    // List of sessions
-    List(sessions) { session in
-      sessionCell(session)
+    VStack {
+      let session = store.day1Sessions.map { SessionWrapper(session: $0) }
+      List(session) { session in
+        sessionCell(session)
+      }
     }
     .task {
-      do {
-        let client = SessionDataClient.live
-        let allSessions = try await client.fetchSchedules(nil)
-        self.sessions = allSessions.map(SessionWrapper.init)
-      } catch {
-
-      }
+      store.send(.task)
     }
   }
 

@@ -29,11 +29,7 @@ package struct HomeFeature {
       return .none
       
     case .task:
-      return .run { send in
-        @Dependency(\.apiClient) var apiClient
-        let number = try await apiClient.fetchNumber()
-        await send(.binding(.set(\.number, number)))
-      }
+      return .none
     }
   }
 }
