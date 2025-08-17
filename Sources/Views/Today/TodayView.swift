@@ -10,16 +10,22 @@ struct TodayView: View {
     VStack {
       List {
         Section {
+          // 情況 1
+          Text("iPlayground 倒數中： 1 天")  // Date(8/30 09:00)
+          // 情況 2
           Text(
-      """
-          Now section
-          Now section
-      """)
+            """
+            正在進行中：Let’s Functional Programming in Your Swift Code（剩餘：5 分鐘）
+            接下來：10:40 休息
+            再接下來：10:55 Swift C++ Interop
+            """)  // Date(= 8/30 09:35)
+          // 情況 3
+          Text("今年的活動已結束，感謝您的參與！")  // Date(> 8/31 18:00)
         }
 
         Section(
           content: {
-            sessionList
+            sessionList // TODO: highlight cell contains current time
           },
           header: {
             dayPicker

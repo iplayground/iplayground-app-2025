@@ -6,8 +6,6 @@ import Models
 package struct HomeFeature {
   @ObservableState
   package struct State: Equatable {
-    package var number: Number = 0
-
     package init() {}
   }
 
