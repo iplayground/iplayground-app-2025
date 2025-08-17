@@ -41,7 +41,7 @@ struct TodayView: View {
               )
               .buttonStyle(.plain)
               .padding()
-              .background(Material.thin)
+              .background(Material.regular)
             }
           }
         }
@@ -52,7 +52,7 @@ struct TodayView: View {
       .task {
         // TODO: refresh date per minute
       }
-      .navigationTitle("Today")
+      .navigationTitle("議程與活動")
       .navigationBarTitleDisplayMode(.inline)
     }
   }
@@ -113,7 +113,7 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text("Day " + day.rawValue.description)
+        Text("Day \(day.rawValue.description)") // Localization
           .tag(day)
       }
     }
