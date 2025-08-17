@@ -10,6 +10,7 @@ package struct TodayFeature {
     package var day1Sessions: [SessionWrapper] = []
     package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
+    var initialLoaded = false
 
     package var allSessions: [SessionWrapper] {
       day1Sessions + day2Sessions
@@ -66,6 +67,21 @@ package struct TodayFeature {
 
   package func core(state: inout State, action: Action) -> Effect<Action> {
     switch action {
+    case .binding(\.day1Sessions):
+      if state.initialLoaded == false {
+        // 如果現在時間超過第一天的議程的內容，則把selectedDay切成第二天
+        if let lastSessionEnd = state.day1Sessions.last?.dateInterval?.end {
+          @Dependency(\.date.now) var now
+          if now > lastSessionEnd {
+            state.selectedDay = .day2
+          }
+        }
+
+        state.initialLoaded = true
+      }
+
+      return .none
+
     case .binding:
       return .none
 
