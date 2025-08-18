@@ -12,7 +12,6 @@
 
 /* Begin PBXFileReference section */
 		6C1872772E2F320200AC4610 /* iPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CA18F912E51C41200B26446 /* SessionData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SessionData; path = /Users/ethanhuang/Developer/iplayground/SessionData; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,7 +37,6 @@
 		6C18726E2E2F320200AC4610 = {
 			isa = PBXGroup;
 			children = (
-				6CA18F912E51C41200B26446 /* SessionData */,
 				6C1872792E2F320200AC4610 /* iPlayground */,
 				6C1872782E2F320200AC4610 /* Products */,
 			);

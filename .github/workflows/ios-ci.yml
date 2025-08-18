@@ -23,7 +23,7 @@ jobs:
           # Capture exit code while still tee-ing output
           if xcodebuild test \
             -project iPlayground/iPlayground.xcodeproj \
-            -scheme iPlayground \
+            -scheme AppPackage-Package \
             -destination 'platform=iOS Simulator,name=iPhone 16,arch=arm64' \
             -parallel-testing-enabled YES \
             -quiet \
