@@ -4,6 +4,7 @@ import Features
 import Models
 import SwiftUI
 
+@ViewAction(for: TodayFeature.self)
 struct TodayView: View {
   @Bindable var store: StoreOf<TodayFeature>
 
@@ -26,7 +27,7 @@ struct TodayView: View {
                   if let currentSession = store.currentSession {
                     // XXX: Change segmented control first
                     // then scroll to current session cell
-                    store.send(.tapNowSection)
+                    send(.tapNowSection)
 
                     Task { @MainActor in
                       withAnimation {
@@ -47,7 +48,7 @@ struct TodayView: View {
         }
       }
       .task {
-        store.send(.task)
+        send(.task)
       }
       .task {
         // TODO: refresh date per minute

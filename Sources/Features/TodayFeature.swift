@@ -52,10 +52,16 @@ package struct TodayFeature {
     package init() {}
   }
 
-  package enum Action: Equatable, BindableAction {
+  @CasePathable
+  package enum Action: Equatable, BindableAction, ComposableArchitecture.ViewAction {
+    case view(ViewAction)
     case binding(BindingAction<State>)
-    case task
-    case tapNowSection
+
+    @CasePathable
+    package enum ViewAction: Equatable {
+      case task
+      case tapNowSection
+    }
   }
 
   package init() {}
@@ -85,35 +91,38 @@ package struct TodayFeature {
     case .binding:
       return .none
 
-    case .task:
-      return .run { send in
-        await withThrowingTaskGroup(of: Void.self) { group in
-          group.addTask {
-            @Dependency(\.iPlaygroundDataClient) var client
-            let sessions = try await client.fetchSchedules(1)
-            let day1Date = createDate(year: 2025, month: 8, day: 30)
-            let day1Sessions = sessions.map { SessionWrapper(date: day1Date, session: $0) }
-            await send(.binding(.set(\.day1Sessions, day1Sessions)))
-          }
-          group.addTask {
-            @Dependency(\.iPlaygroundDataClient) var client
-            let sessions = try await client.fetchSchedules(2)
-            let day2Date = createDate(year: 2025, month: 8, day: 31)
-            let day2Sessions = sessions.map { SessionWrapper(date: day2Date, session: $0) }
-            await send(.binding(.set(\.day2Sessions, day2Sessions)))
+    case let .view(viewAction):
+      switch viewAction {
+      case .task:
+        return .run { send in
+          await withThrowingTaskGroup(of: Void.self) { group in
+            group.addTask {
+              @Dependency(\.iPlaygroundDataClient) var client
+              let sessions = try await client.fetchSchedules(1)
+              let day1Date = createDate(year: 2025, month: 8, day: 30)
+              let day1Sessions = sessions.map { SessionWrapper(date: day1Date, session: $0) }
+              await send(.binding(.set(\.day1Sessions, day1Sessions)))
+            }
+            group.addTask {
+              @Dependency(\.iPlaygroundDataClient) var client
+              let sessions = try await client.fetchSchedules(2)
+              let day2Date = createDate(year: 2025, month: 8, day: 31)
+              let day2Sessions = sessions.map { SessionWrapper(date: day2Date, session: $0) }
+              await send(.binding(.set(\.day2Sessions, day2Sessions)))
+            }
           }
         }
-      }
 
-    case .tapNowSection:
-      if let currentSession = state.currentSession {
-        if state.day1Sessions.first(where: { $0.id == currentSession.id }) != nil {
-          state.selectedDay = .day1
-        } else if state.day2Sessions.first(where: { $0.id == currentSession.id }) != nil {
-          state.selectedDay = .day2
+      case .tapNowSection:
+        if let currentSession = state.currentSession {
+          if state.day1Sessions.first(where: { $0.id == currentSession.id }) != nil {
+            state.selectedDay = .day1
+          } else if state.day2Sessions.first(where: { $0.id == currentSession.id }) != nil {
+            state.selectedDay = .day2
+          }
         }
+        return .none
       }
-      return .none
     }
   }
 

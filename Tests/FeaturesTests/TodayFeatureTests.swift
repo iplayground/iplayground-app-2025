@@ -23,7 +23,7 @@ final class TodayFeatureTests: XCTestCase {
     }
 
     // Just verify the task starts without error
-    await store.send(.task)
+    await store.send(.view(.task))
 
     // We expect two binding actions, handle the state changes appropriately
     await store.receive(\.binding) { state in
@@ -140,7 +140,7 @@ final class TodayFeatureTests: XCTestCase {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     }
 
-    await store.send(.tapNowSection) {
+    await store.send(.view(.tapNowSection)) {
       $0.selectedDay = .day1
     }
   }
@@ -169,7 +169,7 @@ final class TodayFeatureTests: XCTestCase {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     }
 
-    await store.send(.tapNowSection) {
+    await store.send(.view(.tapNowSection)) {
       $0.selectedDay = .day2
     }
   }
@@ -179,7 +179,7 @@ final class TodayFeatureTests: XCTestCase {
       TodayFeature()
     }
 
-    await store.send(.tapNowSection)
+    await store.send(.view(.tapNowSection))
   }
 
   // MARK: - Helper Methods
