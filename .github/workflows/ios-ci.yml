@@ -21,17 +21,24 @@ jobs:
         run: |
           set -o pipefail
           # Capture exit code while still tee-ing output
-          if swift test | tee test-output.log; then
-            echo "SWIFT_TEST_SUCCESS=true" >> $GITHUB_ENV
+          if xcodebuild test \
+            -workspace iPlayground/iPlayground.xcworkspace \
+            -scheme iPlayground \
+            -testPlan iPlayground \
+            -destination 'platform=iOS Simulator,name=iPhone 16,arch=arm64' \
+            -parallel-testing-enabled YES \
+            -quiet \
+            | tee test-output.log; then
+            echo "XCODEBUILD_SUCCESS=true" >> $GITHUB_ENV
           else
-            echo "SWIFT_TEST_SUCCESS=false" >> $GITHUB_ENV
+            echo "XCODEBUILD_SUCCESS=false" >> $GITHUB_ENV
           fi
       
       - name: Parse Test Results
         if: always()
         run: |
-          # Primary check: use swift test exit code
-          if [ "$SWIFT_TEST_SUCCESS" = "true" ]; then
+          # Primary check: use xcodebuild exit code
+          if [ "$XCODEBUILD_SUCCESS" = "true" ]; then
             echo "TEST_STATUS=✅ Tests Passed" >> $GITHUB_ENV  
             echo "TEST_RESULT=SUCCESS" >> $GITHUB_ENV
           else
@@ -39,10 +46,9 @@ jobs:
             echo "TEST_RESULT=FAILURE" >> $GITHUB_ENV
           fi
           
-          # Extract test statistics from swift test output
-          # Swift test shows different patterns like "Test Case ... passed/failed" or final summary
-          if grep -q "Test Case\|passed\|failed\|All tests\|tests executed" test-output.log; then
-            STATS=$(grep -E "Test Case.*passed|Test Case.*failed|All tests.*passed|[0-9]+ tests executed|Build complete" test-output.log | tail -3 | tr '\n' ' ')
+          # Extract test statistics from xcodebuild output
+          if grep -q "Test Suite\|Executed.*test\|tests passed\|tests failed" test-output.log; then
+            STATS=$(grep -E "Executed [0-9]+ test|Test Suite.*passed|Test Suite.*failed|[0-9]+ tests? passed|[0-9]+ tests? failed" test-output.log | tail -1)
             echo "TEST_STATS=$STATS" >> $GITHUB_ENV
           fi
 
@@ -72,7 +78,7 @@ jobs:
           if [ "$TEST_RESULT" = "FAILURE" ]; then
             echo "### ❌ Failed Tests" >> test-report.md
             echo "\`\`\`" >> test-report.md
-            grep -A 3 -B 1 "error:\|failed\|FAILED\|fatalError\|Found unhandled resource" test-output.log | head -30 >> test-report.md || echo "Unable to extract detailed error information" >> test-report.md
+            grep -A 5 -B 2 "error:\|failed\|FAILED\|XCTAssert" test-output.log | head -20 >> test-report.md || echo "Unable to extract detailed error information" >> test-report.md
             echo "\`\`\`" >> test-report.md
           fi
       
