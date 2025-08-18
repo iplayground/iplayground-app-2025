@@ -1,0 +1,151 @@
+name: iOS CI/CD Pipeline
+# Trigger Actions after enabling workflows
+
+on:
+  pull_request:
+    branches: [ main ]
+
+# Auto-cancel previous workflow runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          set -o pipefail
+          # Capture exit code while still tee-ing output
+          if xcodebuild test \
+            -workspace iPlayground/iPlayground.xcworkspace \
+            -scheme iPlayground \
+            -testPlan iPlayground \
+            -destination 'platform=iOS Simulator,name=iPhone 16,arch=arm64' \
+            -parallel-testing-enabled YES \
+            -quiet \
+            | tee test-output.log; then
+            echo "XCODEBUILD_SUCCESS=true" >> $GITHUB_ENV
+          else
+            echo "XCODEBUILD_SUCCESS=false" >> $GITHUB_ENV
+          fi
+      
+      - name: Parse Test Results
+        if: always()
+        run: |
+          # Primary check: use xcodebuild exit code
+          if [ "$XCODEBUILD_SUCCESS" = "true" ]; then
+            echo "TEST_STATUS=✅ Tests Passed" >> $GITHUB_ENV  
+            echo "TEST_RESULT=SUCCESS" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=❌ Tests Failed" >> $GITHUB_ENV
+            echo "TEST_RESULT=FAILURE" >> $GITHUB_ENV
+          fi
+          
+          # Extract test statistics from xcodebuild output
+          if grep -q "Test Suite\|Executed.*test\|tests passed\|tests failed" test-output.log; then
+            STATS=$(grep -E "Executed [0-9]+ test|Test Suite.*passed|Test Suite.*failed|[0-9]+ tests? passed|[0-9]+ tests? failed" test-output.log | tail -1)
+            echo "TEST_STATS=$STATS" >> $GITHUB_ENV
+          fi
+
+      - name: Fail job if tests failed
+        if: always()
+        run: |
+          if [ "$TEST_RESULT" = "FAILURE" ]; then
+            echo "❌ Tests failed - failing the job"
+            exit 1
+          fi
+      
+      - name: Generate Test Report
+        if: always()
+        run: |
+          echo "## 🧪 Test Report" > test-report.md
+          echo "" >> test-report.md
+          echo "**Status:** $TEST_STATUS" >> test-report.md
+          echo "" >> test-report.md
+          if [ ! -z "$TEST_STATS" ]; then
+            echo "**Statistics:** $TEST_STATS" >> test-report.md
+            echo "" >> test-report.md
+          fi
+          echo "**Commit:** \`${{ github.sha }}\`" >> test-report.md
+          echo "**Branch:** \`${{ github.head_ref || github.ref_name }}\`" >> test-report.md
+          echo "" >> test-report.md
+          
+          if [ "$TEST_RESULT" = "FAILURE" ]; then
+            echo "### ❌ Failed Tests" >> test-report.md
+            echo "\`\`\`" >> test-report.md
+            grep -A 5 -B 2 "error:\|failed\|FAILED\|XCTAssert" test-output.log | head -20 >> test-report.md || echo "Unable to extract detailed error information" >> test-report.md
+            echo "\`\`\`" >> test-report.md
+          fi
+      
+      - name: Comment Test Results on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const testReport = fs.readFileSync('test-report.md', 'utf8');
+            
+            // Find existing test report comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.login === 'github-actions[bot]' && 
+              comment.body.includes('🧪 Test Report')
+            );
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: testReport
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: testReport
+              });
+            }
+      
+      - name: Set PR Status Check
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = process.env.TEST_RESULT === 'SUCCESS' ? 'success' : 'failure';
+            const description = process.env.TEST_RESULT === 'SUCCESS' ? 
+              'All tests passed ✅' : 'Some tests failed ❌';
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: status,
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: description,
+              context: 'iOS Tests'
+            });
+      
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test-output.log
+            test-report.md
+          retention-days: 7

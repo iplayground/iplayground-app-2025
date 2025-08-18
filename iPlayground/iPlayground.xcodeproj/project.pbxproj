@@ -101,7 +101,6 @@
 			mainGroup = 6C18726E2E2F320200AC4610;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6C1872862E2F324400AC4610 /* XCLocalSwiftPackageReference "../../iplayground-app-2025" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6C1872782E2F320200AC4610 /* Products */;
@@ -344,13 +343,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		6C1872862E2F324400AC4610 /* XCLocalSwiftPackageReference "../../iplayground-app-2025" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../iplayground-app-2025";
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		6C1872872E2F324400AC4610 /* PublicApp */ = {

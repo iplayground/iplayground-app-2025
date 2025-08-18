@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "7FD0EB21-1121-430A-87B7-EBE34FA4539A",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:iPlayground.xcodeproj",
+      "identifier" : "6C1872762E2F320200AC4610",
+      "name" : "iPlayground"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "ModelsTests",
+        "name" : "ModelsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "FeaturesTests",
+        "name" : "FeaturesTests"
+      }
+    }
+  ],
+  "version" : 1
+}

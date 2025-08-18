@@ -105,11 +105,12 @@ let package = Package(
     sessionData.package,
   ],
   targets: [
+    models.target,
+    models.testTarget,
     dependencyClients.target,
     dependencyClientsLive.target,
     features.target,
     features.testTarget,
-    models.target,
     publicApp.target,
     views.target,
   ]
