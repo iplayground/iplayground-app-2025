@@ -27,7 +27,7 @@ struct TodayView: View {
                     // XXX: Change segmented control first
                     // then scroll to current session cell
                     store.send(.tapNowSection)
-                    
+
                     Task { @MainActor in
                       withAnimation {
                         proxy.scrollTo(currentSession.id)
@@ -113,7 +113,7 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text("Day \(day.rawValue.description)") // Localization
+        Text("Day \(day.rawValue.description)")  // Localization
           .tag(day)
       }
     }

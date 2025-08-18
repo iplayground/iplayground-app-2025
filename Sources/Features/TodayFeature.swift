@@ -109,8 +109,7 @@ package struct TodayFeature {
       if let currentSession = state.currentSession {
         if state.day1Sessions.first(where: { $0.id == currentSession.id }) != nil {
           state.selectedDay = .day1
-        } else if state.day2Sessions.first(where: { $0.id == currentSession.id }) != nil
-        {
+        } else if state.day2Sessions.first(where: { $0.id == currentSession.id }) != nil {
           state.selectedDay = .day2
         }
       }

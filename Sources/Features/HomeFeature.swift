@@ -25,7 +25,7 @@ package struct HomeFeature {
     switch action {
     case .binding:
       return .none
-      
+
     case .task:
       return .none
     }

@@ -49,7 +49,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testCurrentSessionComputationWithActivemakeSession() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let session = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
@@ -57,7 +57,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let sessionWrapper = SessionWrapper(date: sessionDate, session: session)
 
     withDependencies {
@@ -74,7 +74,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testCurrentSessionComputationWhenNoCurrentmakeSession() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let session = makeSession(
       time: "08:00-09:00",
       title: "Past Session",
@@ -82,7 +82,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let sessionWrapper = SessionWrapper(date: sessionDate, session: session)
 
     withDependencies {
@@ -98,7 +98,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testNextSessionComputation() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let currentSession = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
@@ -106,7 +106,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let nextSession = makeSession(
       time: "11:00-12:00",
       title: "Next Session",
@@ -114,7 +114,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let currentWrapper = SessionWrapper(date: sessionDate, session: currentSession)
     let nextWrapper = SessionWrapper(date: sessionDate, session: nextSession)
 
@@ -132,7 +132,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testNextSessionComputationWhenNoCurrentmakeSession() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let session = makeSession(
       time: "08:00-09:00",
       title: "Past Session",
@@ -140,7 +140,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let sessionWrapper = SessionWrapper(date: sessionDate, session: session)
 
     withDependencies {
@@ -156,7 +156,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testNextNextSessionComputation() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let currentSession = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
@@ -164,7 +164,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let nextSession = makeSession(
       time: "11:00-12:00",
       title: "Next Session",
@@ -172,7 +172,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let nextNextSession = makeSession(
       time: "12:00-13:00",
       title: "Next Next Session",
@@ -180,7 +180,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let currentWrapper = SessionWrapper(date: sessionDate, session: currentSession)
     let nextWrapper = SessionWrapper(date: sessionDate, session: nextSession)
     let nextNextWrapper = SessionWrapper(date: sessionDate, session: nextNextSession)
@@ -199,7 +199,7 @@ final class TodayFeatureStateTests: XCTestCase {
   func testNextNextSessionComputationWhenNoNextmakeSession() async {
     let now = Date()
     let sessionDate = Calendar.current.startOfDay(for: now)
-    
+
     let session = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
@@ -207,7 +207,7 @@ final class TodayFeatureStateTests: XCTestCase {
       speaker: "Test Speaker",
       description: "Test description"
     )
-    
+
     let sessionWrapper = SessionWrapper(date: sessionDate, session: session)
 
     withDependencies {
