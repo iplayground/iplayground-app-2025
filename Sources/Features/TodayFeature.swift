@@ -107,9 +107,9 @@ package struct TodayFeature {
 
     case .tapNowSection:
       if let currentSession = state.currentSession {
-        if let day1Session = state.day1Sessions.first(where: { $0.id == currentSession.id }) {
+        if state.day1Sessions.first(where: { $0.id == currentSession.id }) != nil {
           state.selectedDay = .day1
-        } else if let day2Session = state.day2Sessions.first(where: { $0.id == currentSession.id })
+        } else if state.day2Sessions.first(where: { $0.id == currentSession.id }) != nil
         {
           state.selectedDay = .day2
         }
