@@ -9,19 +9,12 @@ func makeSession(
   speakerID: Speaker.ID?,
   description: String
 ) -> Session {
-  // Since Session is Codable, we can use JSON to create it
-  let tagsJSON = try! String(data: JSONSerialization.data(withJSONObject: tags), encoding: .utf8)!
-  let jsonData = """
-    {
-      "time": "\(time)",
-      "title": "\(title)",
-      "tags": \(tagsJSON),
-      "speaker": "\(speaker)",
-      "speakerID": \(speakerID ?? 0),
-      "description": "\(description)"
-    }
-    """.data(using: .utf8)!
-
-  // Decode the JSON to create the Session
-  return try! JSONDecoder().decode(Session.self, from: jsonData)
+  return Session(
+    time: time,
+    title: title,
+    tags: tags,
+    speaker: speaker,
+    speakerID: speakerID,
+    description: description
+  )
 }
