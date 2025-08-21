@@ -10,6 +10,7 @@ import Features
 import Models
 import SwiftUI
 
+@ViewAction(for: SpeakerFeature.self)
 struct SpeakerView: View {
   let store: StoreOf<SpeakerFeature>
 
@@ -74,28 +75,112 @@ struct SpeakerView: View {
   }
 
   @ViewBuilder
+  private func copyURLButton(url: URL) -> some View {
+    Button(
+      action: {
+        send(.tapCopyURL(url))
+      },
+      label: {
+        VStack {
+          Label("拷貝", systemImage: "document.on.document")
+        }
+      }
+    )
+  }
+
+  @ViewBuilder
   private var socialLinks: some View {
     VStack(spacing: 8) {
       if let website = store.speaker.url {
-        Link("Website", destination: website)
+        Menu(
+          content: {
+            copyURLButton(url: website)
+          },
+          label: {
+            Text("網站")
+          },
+          primaryAction: {
+            send(.tapURL(website))
+          }
+        )
       }
       if let github = store.speaker.github {
-        Link("GitHub", destination: github)
+        Menu(
+          content: {
+            copyURLButton(url: github)
+          },
+          label: {
+            Text(verbatim: "GitHub")
+          },
+          primaryAction: {
+            send(.tapURL(github))
+          }
+        )
       }
       if let linkedin = store.speaker.linkedin {
-        Link("LinkedIn", destination: linkedin)
+        Menu(
+          content: {
+            copyURLButton(url: linkedin)
+          },
+          label: {
+            Text(verbatim: "LinkedIn")
+          },
+          primaryAction: {
+            send(.tapURL(linkedin))
+          }
+        )
       }
       if let x = store.speaker.x {
-        Link("X (Twitter)", destination: x)
+        Menu(
+          content: {
+            copyURLButton(url: x)
+          },
+          label: {
+            Text(verbatim: "X (Twitter)")
+          },
+          primaryAction: {
+            send(.tapURL(x))
+          }
+        )
       }
       if let threads = store.speaker.threads {
-        Link("Threads", destination: threads)
+        Menu(
+          content: {
+            copyURLButton(url: threads)
+          },
+          label: {
+            Text(verbatim: "Threads")
+          },
+          primaryAction: {
+            send(.tapURL(threads))
+          }
+        )
       }
       if let instagram = store.speaker.ig {
-        Link("Instagram", destination: instagram)
+        Menu(
+          content: {
+            copyURLButton(url: instagram)
+          },
+          label: {
+            Text(verbatim: "Instagram")
+          },
+          primaryAction: {
+            send(.tapURL(instagram))
+          }
+        )
       }
       if let facebook = store.speaker.fb {
-        Link("Facebook", destination: facebook)
+        Menu(
+          content: {
+            copyURLButton(url: facebook)
+          },
+          label: {
+            Text(verbatim: "Facebook")
+          },
+          primaryAction: {
+            send(.tapURL(facebook))
+          }
+        )
       }
     }
     .font(.body)
