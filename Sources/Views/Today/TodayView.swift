@@ -9,53 +9,64 @@ struct TodayView: View {
   @Bindable var store: StoreOf<TodayFeature>
 
   var body: some View {
-    NavigationStack {
-      VStack {
-        ScrollViewReader { proxy in
-          List {
-            Section {
-              sessionList
-            } header: {
-              dayPicker
-            }
-          }
-          .listStyle(.inset)
-          .safeAreaInset(edge: .bottom) {
-            VStack {
-              Button(
-                action: {
-                  if let currentSession = store.currentSession {
-                    // XXX: Change segmented control first
-                    // then scroll to current session cell
-                    send(.tapNowSection)
+    NavigationStack(
+      path: $store.scope(state: \.path, action: \.path),
+      root: { rootView },
+      destination: { store in
+        switch store.case {
+        case let .speaker(store):
+          SpeakerView(store: store)
+        }
+      }
+    )
+  }
 
-                    Task { @MainActor in
-                      withAnimation {
-                        proxy.scrollTo(currentSession.id)
-                      }
+  var rootView: some View {
+    VStack {
+      ScrollViewReader { proxy in
+        List {
+          Section {
+            sessionList
+          } header: {
+            dayPicker
+          }
+        }
+        .listStyle(.inset)
+        .safeAreaInset(edge: .bottom) {
+          VStack {
+            Button(
+              action: {
+                if let currentSession = store.currentSession {
+                  // XXX: Change segmented control first
+                  // then scroll to current session cell
+                  send(.tapNowSection)
+
+                  Task { @MainActor in
+                    withAnimation {
+                      proxy.scrollTo(currentSession.id)
                     }
                   }
-                },
-                label: {
-                  nowSection
                 }
-              )
-              .buttonStyle(.plain)
-              .padding()
-              .background(Material.regular)
-            }
+              },
+              label: {
+                nowSection
+              }
+            )
+            .buttonStyle(.plain)
+            .padding()
+            .background(Material.regular)
           }
         }
       }
-      .task {
-        send(.task)
-      }
-      .task {
-        // TODO: refresh date per minute
-      }
-      .navigationTitle("議程與活動")
-      .navigationBarTitleDisplayMode(.inline)
     }
+    .task {
+      send(.task)
+    }
+    .task {
+      // TODO: refresh date per minute
+    }
+    .navigationTitle("議程與活動")
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   @ViewBuilder
@@ -126,8 +137,15 @@ struct TodayView: View {
     let currentSessionID = store.currentSession?.id
 
     ForEach(store.currentSessions) { session in
-      sessionCell(session)
-        .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      Button(
+        action: {
+          send(.tapSession(session))
+        },
+        label: {
+          sessionCell(session)
+        }
+      )
+      .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
       // TODO: Change highlight color
     }
   }
