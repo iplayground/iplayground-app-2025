@@ -12,6 +12,6 @@ final class AppFeatureTests: XCTestCase {
       }
     )
 
-    await store.send(.task)
+    await store.send(\.task)
   }
 }

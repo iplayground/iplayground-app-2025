@@ -23,7 +23,7 @@ final class TodayFeatureTests: XCTestCase {
     }
 
     // Just verify the task starts without error
-    await store.send(.view(.task))
+    await store.send(\.view.task)
 
     // We expect two binding actions, handle the state changes appropriately
     await store.receive(\.binding) { state in
@@ -52,13 +52,13 @@ final class TodayFeatureTests: XCTestCase {
       $0.date.now = now
     }
 
-    await store.send(.binding(.set(\.day1Sessions, [day1Session]))) {
+    await store.send(\.binding.day1Sessions, [day1Session]) {
       $0.day1Sessions = [day1Session]
       $0.selectedDay = .day2
       $0.initialLoaded = true
     }
 
-    await store.send(.binding(.set(\.day1Sessions, [day1Session])))
+    await store.send(\.binding.day1Sessions, [day1Session])
   }
 
   func testBindingDay1SessionsWithoutAutoSwitchToDay2() async {
@@ -86,7 +86,7 @@ final class TodayFeatureTests: XCTestCase {
       $0.selectedDay = .day1
     }
 
-    await store.send(.binding(.set(\.day1Sessions, [day1Session]))) {
+    await store.send(\.binding.day1Sessions, [day1Session]) {
       $0.day1Sessions = [day1Session]
       $0.initialLoaded = true
     }
@@ -102,7 +102,7 @@ final class TodayFeatureTests: XCTestCase {
       TodayFeature()
     }
 
-    await store.send(.binding(.set(\.day1Sessions, [day1Session]))) {
+    await store.send(\.binding.day1Sessions, [day1Session]) {
       $0.day1Sessions = [day1Session]
     }
   }
@@ -112,7 +112,7 @@ final class TodayFeatureTests: XCTestCase {
       TodayFeature()
     }
 
-    await store.send(.binding(.set(\.selectedDay, .day2))) {
+    await store.send(\.binding.selectedDay, .day2) {
       $0.selectedDay = .day2
     }
   }
@@ -142,7 +142,7 @@ final class TodayFeatureTests: XCTestCase {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     }
 
-    await store.send(.view(.tapNowSection)) {
+    await store.send(\.view.tapNowSection) {
       $0.selectedDay = .day1
     }
   }
@@ -172,7 +172,7 @@ final class TodayFeatureTests: XCTestCase {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     }
 
-    await store.send(.view(.tapNowSection)) {
+    await store.send(\.view.tapNowSection) {
       $0.selectedDay = .day2
     }
   }
@@ -182,7 +182,7 @@ final class TodayFeatureTests: XCTestCase {
       TodayFeature()
     }
 
-    await store.send(.view(.tapNowSection))
+    await store.send(\.view.tapNowSection)
   }
 
   // MARK: - Helper Methods

@@ -110,7 +110,7 @@ struct CommunityView: View {
       Spacer()
       switch navigationIndicator {
       case let .link(url):
-          Link(destination: url, label: { Image(systemName: "arrow.up.right.square") })
+        Link(destination: url, label: { Image(systemName: "arrow.up.right.square") })
       case .chevron:
         Image(systemName: "chevron.right")
       case .empty:
