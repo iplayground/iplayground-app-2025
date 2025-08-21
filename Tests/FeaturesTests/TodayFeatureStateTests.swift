@@ -55,6 +55,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -80,6 +81,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Past Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -104,6 +106,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -112,6 +115,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Next Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -138,6 +142,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Past Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -161,7 +166,8 @@ final class TodayFeatureStateTests: XCTestCase {
       time: "10:00-11:00",
       title: "Current Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 0",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -169,7 +175,8 @@ final class TodayFeatureStateTests: XCTestCase {
       time: "11:00-12:00",
       title: "Next Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 1",
+      speakerID: 1,
       description: "Test description"
     )
 
@@ -177,7 +184,8 @@ final class TodayFeatureStateTests: XCTestCase {
       time: "12:00-13:00",
       title: "Next Next Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 2",
+      speakerID: 2,
       description: "Test description"
     )
 
@@ -205,6 +213,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -239,6 +248,7 @@ final class TodayFeatureStateTests: XCTestCase {
       timeRange: timeRange,
       title: title,
       speaker: speaker,
+      speakerID: 0,
       tags: nil,
       description: "Test description"
     )

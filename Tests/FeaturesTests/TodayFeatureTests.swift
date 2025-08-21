@@ -70,6 +70,7 @@ final class TodayFeatureTests: XCTestCase {
       title: "Day 1 Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -125,6 +126,7 @@ final class TodayFeatureTests: XCTestCase {
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -154,6 +156,7 @@ final class TodayFeatureTests: XCTestCase {
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -199,6 +202,7 @@ final class TodayFeatureTests: XCTestCase {
         title: title,
         tags: [],
         speaker: speaker,
+        speakerID: 0,
         description: "Test description"
       )
       return SessionWrapper(date: date, session: session)
@@ -207,6 +211,7 @@ final class TodayFeatureTests: XCTestCase {
         timeRange: timeRange,
         title: title,
         speaker: speaker,
+        speakerID: 0,
         tags: nil,
         description: "Test description"
       )

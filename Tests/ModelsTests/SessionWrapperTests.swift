@@ -14,6 +14,7 @@ struct SessionWrapperTests {
       timeRange: "11:30 - 11:50",
       title: "Test Session",
       speaker: "Test Speaker",
+      speakerID: 0,
       tags: nil,
       description: nil
     )
@@ -51,6 +52,7 @@ struct SessionWrapperTests {
       timeRange: "09:40 - 10:30",
       title: "Test Session",
       speaker: "Test Speaker",
+      speakerID: 0,
       tags: nil,
       description: nil
     )
@@ -99,6 +101,7 @@ struct SessionWrapperTests {
         timeRange: invalidFormat,
         title: "Test Session",
         speaker: "Test Speaker",
+        speakerID: 0,
         tags: nil,
         description: nil
       )
@@ -149,6 +152,7 @@ struct SessionWrapperTests {
         timeRange: format,
         title: "Test Session",
         speaker: "Test Speaker",
+        speakerID: 0,
         tags: nil,
         description: nil
       )
@@ -178,6 +182,7 @@ struct SessionWrapperTests {
       timeRange: "23:30 - 00:30",
       title: "Late Night Session",
       speaker: "Night Owl",
+      speakerID: 0,
       tags: nil,
       description: nil
     )
@@ -218,6 +223,7 @@ struct SessionWrapperTests {
         "title": "Mock Session",
         "tags": ["test"],
         "speaker": "Mock Speaker",
+        "speakerID": 0,
         "description": "Mock Description"
       }
       """

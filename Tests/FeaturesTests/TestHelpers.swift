@@ -6,6 +6,7 @@ func makeSession(
   title: String,
   tags: [String] = [],
   speaker: String,
+  speakerID: Speaker.ID?,
   description: String
 ) -> Session {
   // Since Session is Codable, we can use JSON to create it
@@ -16,6 +17,7 @@ func makeSession(
       "title": "\(title)",
       "tags": \(tagsJSON),
       "speaker": "\(speaker)",
+      "speakerID": \(speakerID ?? 0),
       "description": "\(description)"
     }
     """.data(using: .utf8)!
