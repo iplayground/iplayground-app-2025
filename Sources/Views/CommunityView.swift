@@ -56,7 +56,8 @@ struct CommunityView: View {
       }
     }
     .pickerStyle(.segmented)
-    .padding()
+    .padding(.horizontal)
+    .padding(.bottom, 8)
   }
 
   @ViewBuilder
@@ -135,6 +136,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
+    .contentMargins(.vertical, -4, for: .scrollIndicators)
   }
 
   @ViewBuilder
@@ -150,6 +152,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
+    .contentMargins(.vertical, -4, for: .scrollIndicators)
   }
 }
 
