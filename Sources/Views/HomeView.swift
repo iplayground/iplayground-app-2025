@@ -18,23 +18,28 @@ struct HomeView: View {
           reducer: { TodayFeature() }
         )
       )
-      .tabItem { Label("Today", systemImage: "calendar") }
+      .tabItem { Label("議程與活動", systemImage: "calendar") }
 
       // Tab 2: Sponsors, Speakers, & Staff
-      Text("Sponsors")
-        .tabItem { Label("Community", systemImage: "person.3") }
+      CommunityView(
+        store: .init(
+          initialState: CommunityFeature.State(),
+          reducer: { CommunityFeature() }
+        )
+      )
+      .tabItem { Label("社群", systemImage: "person.3") }
 
       // Tab 3: Flitto (Live Translation)
       Text("Flitto")
-        .tabItem { Label("Flitto", systemImage: "globe") }
+        .tabItem { Label("即時翻譯", systemImage: "globe") }
 
       // Tab 4: My
       Text("My")
-        .tabItem { Label("My", systemImage: "bookmark") }
+        .tabItem { Label("我的", systemImage: "bookmark") }
 
       // Tab 5: About
       Text("About")
-        .tabItem { Label("About", systemImage: "info.circle") }
+        .tabItem { Label("關於", systemImage: "info.circle") }
     }
     .task {
       await store.send(.task).finish()

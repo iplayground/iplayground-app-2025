@@ -21,7 +21,8 @@ struct TodayView: View {
     )
   }
 
-  var rootView: some View {
+  @ViewBuilder
+  private var rootView: some View {
     VStack {
       ScrollViewReader { proxy in
         List {
