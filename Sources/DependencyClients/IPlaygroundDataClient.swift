@@ -1,11 +1,12 @@
 import Dependencies
 import DependenciesMacros
+import IdentifiedCollections
 import SessionData
 
 @DependencyClient
 public struct IPlaygroundDataClient: Sendable {
   public var fetchSchedules: @Sendable (_ day: Int?) async throws -> [Session]
-  public var fetchSpeakers: @Sendable () async throws -> [Speaker]
+  public var fetchSpeakers: @Sendable () async throws -> IdentifiedArrayOf<Speaker>
   public var fetchSponsors: @Sendable () async throws -> SponsorsData
   public var fetchStaffs: @Sendable () async throws -> [Staff]
 }
@@ -19,7 +20,8 @@ extension IPlaygroundDataClient: TestDependencyKey {
     },
     fetchSpeakers: {
       let client = SessionDataClient.live
-      return try await client.fetchSpeakers()
+      let speakers = try await client.fetchSpeakers()
+      return IdentifiedArrayOf(uniqueElements: speakers)
     },
     fetchSponsors: {
       let client = SessionDataClient.live

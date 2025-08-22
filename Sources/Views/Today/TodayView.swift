@@ -9,53 +9,63 @@ struct TodayView: View {
   @Bindable var store: StoreOf<TodayFeature>
 
   var body: some View {
-    NavigationStack {
-      VStack {
-        ScrollViewReader { proxy in
-          List {
-            Section {
-              sessionList
-            } header: {
-              dayPicker
-            }
-          }
-          .listStyle(.inset)
-          .safeAreaInset(edge: .bottom) {
-            VStack {
-              Button(
-                action: {
-                  if let currentSession = store.currentSession {
-                    // XXX: Change segmented control first
-                    // then scroll to current session cell
-                    send(.tapNowSection)
+    NavigationStack(
+      path: $store.scope(state: \.path, action: \.path),
+      root: { rootView },
+      destination: { store in
+        switch store.case {
+        case let .speaker(store):
+          SpeakerView(store: store)
+        }
+      }
+    )
+  }
 
-                    Task { @MainActor in
-                      withAnimation {
-                        proxy.scrollTo(currentSession.id)
-                      }
+  @ViewBuilder
+  private var rootView: some View {
+    VStack(spacing: 0) {
+      dayPicker
+      ScrollViewReader { proxy in
+        List {
+          sessionList
+        }
+        .listStyle(.inset)
+        .contentMargins(.vertical, -4, for: .scrollIndicators)
+        .safeAreaInset(edge: .bottom) {
+          VStack {
+            Button(
+              action: {
+                if let currentSession = store.currentSession {
+                  // XXX: Change segmented control first
+                  // then scroll to current session cell
+                  send(.tapNowSection)
+
+                  Task { @MainActor in
+                    withAnimation {
+                      proxy.scrollTo(currentSession.id)
                     }
                   }
-                },
-                label: {
-                  nowSection
                 }
-              )
-              .buttonStyle(.plain)
-              .padding()
-              .background(Material.regular)
-            }
+              },
+              label: {
+                nowSection
+              }
+            )
+            .buttonStyle(.plain)
+            .padding()
+            .background(Material.regular)
           }
         }
       }
-      .task {
-        send(.task)
-      }
-      .task {
-        // TODO: refresh date per minute
-      }
-      .navigationTitle("議程與活動")
-      .navigationBarTitleDisplayMode(.inline)
     }
+    .task {
+      send(.task)
+    }
+    .task {
+      // TODO: refresh date per minute
+    }
+    .navigationTitle("議程與活動")
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   @ViewBuilder
@@ -114,11 +124,13 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text("Day \(day.rawValue.description)")  // Localization
+        Text(day.localizedStringKey)
           .tag(day)
       }
     }
     .pickerStyle(.segmented)
+    .padding(.horizontal)
+    .padding(.bottom, 8)
   }
 
   @ViewBuilder
@@ -126,8 +138,15 @@ struct TodayView: View {
     let currentSessionID = store.currentSession?.id
 
     ForEach(store.currentSessions) { session in
-      sessionCell(session)
-        .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      Button(
+        action: {
+          send(.tapSession(session))
+        },
+        label: {
+          sessionCell(session)
+        }
+      )
+      .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
       // TODO: Change highlight color
     }
   }
@@ -141,25 +160,35 @@ struct TodayView: View {
 
       Text(session.title)
         .font(.headline)
+        .bold()
 
-      Text(session.speaker)
-        .font(.subheadline)
+      if session.speaker.isEmpty == false {
+        Text(session.speaker)
+          .font(.subheadline)
+      }
 
       if let tags = session.tags {
         Text(tags)
-          .font(.caption)
+          .font(.footnote)
           .foregroundColor(.secondary)
       }
 
       if let description = session.description {
         Text(description)
-          .font(.body)
-          .foregroundColor(.primary)
-          .padding(.top, 2)
+          .font(.footnote)
+          .foregroundColor(.secondary)
       }
     }
-    .padding(.vertical, 4)
     .id(session.id)
+  }
+}
+
+extension TodayFeature.State.Day {
+  var localizedStringKey: LocalizedStringKey {
+    switch self {
+    case .day1: return "第 1 天"
+    case .day2: return "第 2 天"
+    }
   }
 }
 

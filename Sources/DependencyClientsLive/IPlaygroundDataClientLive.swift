@@ -1,6 +1,7 @@
 import Dependencies
 import DependenciesMacros
 import DependencyClients
+import IdentifiedCollections
 import SessionData
 
 extension IPlaygroundDataClient: DependencyKey {
@@ -11,7 +12,8 @@ extension IPlaygroundDataClient: DependencyKey {
     },
     fetchSpeakers: {
       let client = SessionDataClient.live
-      return try await client.fetchSpeakers()
+      let speakers = try await client.fetchSpeakers()
+      return IdentifiedArrayOf(uniqueElements: speakers)
     },
     fetchSponsors: {
       let client = SessionDataClient.live

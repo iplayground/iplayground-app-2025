@@ -7,6 +7,7 @@ import SessionData
 package struct TodayFeature {
   @ObservableState
   package struct State: Equatable {
+    package var path = StackState<Path.State>()
     package var day1Sessions: [SessionWrapper] = []
     package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
@@ -54,13 +55,16 @@ package struct TodayFeature {
 
   @CasePathable
   package enum Action: Equatable, BindableAction, ComposableArchitecture.ViewAction {
-    case view(ViewAction)
     case binding(BindingAction<State>)
+    case path(StackActionOf<Path>)
+    case view(ViewAction)
+    case navigateToSpeaker(Speaker)
 
     @CasePathable
     package enum ViewAction: Equatable {
       case task
       case tapNowSection
+      case tapSession(SessionWrapper)
     }
   }
 
@@ -69,6 +73,7 @@ package struct TodayFeature {
   package var body: some Reducer<State, Action> {
     BindingReducer()
     Reduce(core)
+      .forEach(\.path, action: \.path)
   }
 
   package func core(state: inout State, action: Action) -> Effect<Action> {
@@ -89,6 +94,9 @@ package struct TodayFeature {
       return .none
 
     case .binding:
+      return .none
+
+    case .path:
       return .none
 
     case let .view(viewAction):
@@ -122,7 +130,23 @@ package struct TodayFeature {
           }
         }
         return .none
+
+      case let .tapSession(session):
+        guard let speakerID = session.speakerID else {
+          return .none
+        }
+        return .run { send in
+          @Dependency(\.iPlaygroundDataClient) var client
+          guard let speaker = try await client.fetchSpeakers()[id: speakerID] else {
+            return
+          }
+          await send(.navigateToSpeaker(speaker))
+        }
       }
+
+    case let .navigateToSpeaker(speaker):
+      state.path.append(.speaker(.init(speaker: speaker)))
+      return .none
     }
   }
 

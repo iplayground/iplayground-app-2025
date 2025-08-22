@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import CustomDump
 import Dependencies
 import Foundation
 import Models
@@ -46,15 +47,15 @@ final class TodayFeatureStateTests: XCTestCase {
     expectNoDifference(state.currentSessions, [day2Session])
   }
 
-  func testCurrentSessionComputationWithActivemakeSession() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+  func testCurrentSessionComputationWithActiveSession() async {
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let session = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -71,15 +72,15 @@ final class TodayFeatureStateTests: XCTestCase {
     }
   }
 
-  func testCurrentSessionComputationWhenNoCurrentmakeSession() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+  func testCurrentSessionComputationWhenNoCurrentSession() async {
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let session = makeSession(
       time: "08:00-09:00",
       title: "Past Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -96,14 +97,14 @@ final class TodayFeatureStateTests: XCTestCase {
   }
 
   func testNextSessionComputation() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let currentSession = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -112,6 +113,7 @@ final class TodayFeatureStateTests: XCTestCase {
       title: "Next Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -129,15 +131,15 @@ final class TodayFeatureStateTests: XCTestCase {
     }
   }
 
-  func testNextSessionComputationWhenNoCurrentmakeSession() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+  func testNextSessionComputationWhenNoCurrentSession() async {
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let session = makeSession(
       time: "08:00-09:00",
       title: "Past Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -154,14 +156,14 @@ final class TodayFeatureStateTests: XCTestCase {
   }
 
   func testNextNextSessionComputation() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let currentSession = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 0",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -169,7 +171,8 @@ final class TodayFeatureStateTests: XCTestCase {
       time: "11:00-12:00",
       title: "Next Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 1",
+      speakerID: 1,
       description: "Test description"
     )
 
@@ -177,7 +180,8 @@ final class TodayFeatureStateTests: XCTestCase {
       time: "12:00-13:00",
       title: "Next Next Session",
       tags: [],
-      speaker: "Test Speaker",
+      speaker: "Test Speaker 2",
+      speakerID: 2,
       description: "Test description"
     )
 
@@ -196,15 +200,15 @@ final class TodayFeatureStateTests: XCTestCase {
     }
   }
 
-  func testNextNextSessionComputationWhenNoNextmakeSession() async {
-    let now = Date()
-    let sessionDate = Calendar.current.startOfDay(for: now)
+  func testNextNextSessionComputationWhenNoNextSession() async {
+    let sessionDate = createDate(year: 2025, month: 1, day: 15)
 
     let session = makeSession(
       time: "10:00-11:00",
       title: "Current Session",
       tags: [],
       speaker: "Test Speaker",
+      speakerID: 0,
       description: "Test description"
     )
 
@@ -239,8 +243,17 @@ final class TodayFeatureStateTests: XCTestCase {
       timeRange: timeRange,
       title: title,
       speaker: speaker,
+      speakerID: 0,
       tags: nil,
       description: "Test description"
     )
+  }
+
+  private func createDate(year: Int, month: Int, day: Int) -> Date {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(secondsFromGMT: 8 * 3600)!
+
+    let components = DateComponents(year: year, month: month, day: day)
+    return calendar.date(from: components)!
   }
 }

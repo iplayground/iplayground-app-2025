@@ -1,0 +1,95 @@
+import ComposableArchitecture
+import Dependencies
+import Foundation
+import Models
+import SessionData
+import XCTest
+
+@testable import Features
+
+@MainActor
+final class SpeakerFeatureTests: XCTestCase {
+
+  func testInitialState() async {
+    let speaker = createMockSpeaker()
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+      SpeakerFeature()
+    }
+
+    store.assert {
+      $0.speaker = speaker
+    }
+  }
+
+  func testTaskAction() async {
+    let speaker = createMockSpeaker()
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+      SpeakerFeature()
+    }
+
+    await store.send(\.view.task)
+  }
+
+  func testTapURL() async {
+    let speaker = createMockSpeaker()
+    let testURL = URL(string: "https://example.com")!
+
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+      SpeakerFeature()
+    } withDependencies: {
+      $0.openURL = OpenURLEffect { url in
+        XCTAssertEqual(url, testURL)
+        return true
+      }
+    }
+
+    await store.send(\.view.tapURL, testURL)
+  }
+
+  func testTapCopyURL() async {
+    let speaker = createMockSpeaker()
+    let testURL = URL(string: "https://example.com")!
+
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+      SpeakerFeature()
+    } withDependencies: {
+      $0.pasteboardClient.copy = { string in
+        XCTAssertEqual(string, testURL.absoluteString)
+      }
+    }
+
+    await store.send(\.view.tapCopyURL, testURL)
+  }
+
+  // MARK: - Helper Methods
+
+  private func createMockSpeaker(
+    id: Int = 1,
+    name: String = "Test Speaker",
+    title: String? = "Test Title",
+    intro: String = "Test introduction",
+    photo: URL? = URL(string: "https://example.com/photo.jpg"),
+    url: URL? = URL(string: "https://example.com"),
+    fb: URL? = URL(string: "https://facebook.com/test"),
+    github: URL? = URL(string: "https://github.com/test"),
+    linkedin: URL? = URL(string: "https://linkedin.com/test"),
+    threads: URL? = URL(string: "https://threads.net/test"),
+    x: URL? = URL(string: "https://x.com/test"),
+    ig: URL? = URL(string: "https://instagram.com/test")
+  ) -> Speaker {
+    return Speaker(
+      id: id,
+      name: name,
+      title: title,
+      intro: intro,
+      photo: photo,
+      url: url,
+      fb: fb,
+      github: github,
+      linkedin: linkedin,
+      threads: threads,
+      x: x,
+      ig: ig
+    )
+  }
+}

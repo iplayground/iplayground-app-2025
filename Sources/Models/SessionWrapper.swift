@@ -7,6 +7,7 @@ package struct SessionWrapper: Identifiable, Equatable {
   package let dateInterval: DateInterval?
   package let title: String
   package let speaker: String
+  package let speakerID: Speaker.ID?
   package let tags: String?
   package let description: String?
 
@@ -15,6 +16,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     timeRange: String,
     title: String,
     speaker: String,
+    speakerID: Speaker.ID?,
     tags: String?,
     description: String?
   ) {
@@ -22,6 +24,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.dateInterval = Self.parseDateInterval(from: timeRange, baseDate: date)
     self.title = title
     self.speaker = speaker
+    self.speakerID = speakerID
     self.tags = tags
     self.description = description
   }
@@ -31,6 +34,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.dateInterval = Self.parseDateInterval(from: session.time, baseDate: date)
     self.title = session.title
     self.speaker = session.speaker
+    self.speakerID = session.speakerID
     self.tags = session.tags.isEmpty ? nil : session.tags.joined(separator: " · ")
     self.description = session.description.isEmpty ? nil : session.description
   }
@@ -40,6 +44,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.dateInterval = nil
     self.title = session.title
     self.speaker = session.speaker
+    self.speakerID = session.speakerID
     self.tags = session.tags.isEmpty ? nil : session.tags.joined(separator: " · ")
     self.description = session.description.isEmpty ? nil : session.description
   }
@@ -48,6 +53,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     timeRange: String,
     title: String,
     speaker: String,
+    speakerID: Speaker.ID?,
     tags: String?,
     description: String?
   ) {
@@ -55,6 +61,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.dateInterval = nil
     self.title = title
     self.speaker = speaker
+    self.speakerID = speakerID
     self.tags = tags
     self.description = description
   }
