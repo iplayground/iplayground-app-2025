@@ -17,7 +17,7 @@ let sessionData = SourceControlDependency(
 let tca = SourceControlDependency(
   package: .package(
     url: "https://github.com/pointfreeco/swift-composable-architecture",
-    exact: "1.20.2"
+    exact: "1.22.0"
   ),
   productName: "ComposableArchitecture"
 )
