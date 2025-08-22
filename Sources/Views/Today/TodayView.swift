@@ -138,15 +138,23 @@ struct TodayView: View {
     let currentSessionID = store.currentSession?.id
 
     ForEach(store.currentSessions) { session in
-      Button(
-        action: {
-          send(.tapSession(session))
-        },
-        label: {
-          sessionCell(session)
-        }
-      )
-      .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      if session.speakerID != nil {
+        Button(
+          action: {
+            send(.tapSession(session))
+          },
+          label: {
+            HStack {
+              sessionCell(session)
+              Image(systemName: "chevron.right")
+            }
+          }
+        )
+        .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      } else {
+        sessionCell(session)
+          .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      }
       // TODO: Change highlight color
     }
   }
