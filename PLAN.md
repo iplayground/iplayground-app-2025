@@ -85,75 +85,48 @@
 ### 資訊架構圖（View/Feature 命名對應）
 
 iPlayground App 2025
-- AppView & AppFeature (主要 App 結構)
-  - TabView 主導航
-    - 📅 Tab 1: Today & TodayFeature
-      - Now Section
-        - 即時資訊區塊 
-          - ⏰ 倒數計時 (CountdownView)
-          - 📍 當前議程 (CurrentSessionView)
-          - ⏭️ 下個議程 (NextSessionView)
-      - Sessions Section
-        - 議程列表
-          - 📋 兩天列表 (SessionListView)
-          - 📄 詳細頁面 (SessionDetailView & SessionDetailFeature)
-          - 🔍 文字搜尋 (SearchView & SearchFeature)
-          - ⭐ 標記議程 (FavoriteButton)
-    - 👥 Tab 2: Sponsors, Speakers, & Staff
-      - PeopleView & PeopleFeature
-        - 講者介紹
-          - SpeakerListView & SpeakerListFeature
-          - SpeakerDetailView & SpeakerDetailFeature
-            - 📸 個人檔案
-            - 🔗 社群連結
-        - 工作人員
-          - StaffListView & StaffListFeature
-            - 👨‍💻 講者
-            - 🎯 主辦
-            - 🙋‍♀️ 志工
-        - 贊助商
-          - SponsorListView & SponsorListFeature
-            - 🥇 金級
-            - 🥈 銀級
-            - 🥉 銅級
-            - 🔗 網站連結
-    - 🌐 Tab 3: Flitto (Live Translation)
-      - FlittoView & FlittoFeature
-        - 翻譯頁面 (待確認)
-    - 👤 Tab 4: 個人功能
-      - ProfileView & ProfileFeature
-        - QR 交換
-          - QRScannerView & QRScannerFeature
-            - 📱 掃描功能
-          - QRGeneratorView & QRGeneratorFeature
-            - 🏷️ 名片產生
-          - PrivacySettingsView & PrivacySettingsFeature
-            - 🔒 隱私設定
-        - 我的議程
-          - MyScheduleView & MyScheduleFeature
-            - ❤️ 喜愛議程
-            - 🔔 通知設定
-    - ℹ️ Tab 5: 關於
-      - AboutView & AboutFeature
-        - 地點資訊
-          - VenueView & VenueFeature
-            - 🏢 主要場地
-            - 🎉 After Party
-            - 🗺️ Apple Maps
-            - 👀 Look Around
-        - 重要連結
-          - LinksView & LinksFeature
-            - 🌐 官網
-            - 📧 電子報
-            - 📺 YouTube
-            - 💬 Discord
-            - 💻 開源專案
-        - 社群帳號
-          - SocialLinksView
-            - 🐦 Twitter
-            - 🧵 Threads
-            - 🐘 Mastodon
-            - 👥 Facebook
+- TabView 主導航
+ - 📅 Tab 1: 議程
+   - Now Section
+     - [x] 即時資訊區塊：⏰ 倒數計時、📍 當前議程、⏭️ 下個議程
+   - Sessions Section
+     - 兩天分頁 Picker
+     - [x] 議程列表
+     - 🔍 文字搜尋
+     - ⭐ 標記議程功能
+ - 👥 Tab 2: 社群：贊助商、講者、工作人員
+   - 分頁 Picker
+   - Sponsor List: 🥇 金級、🥈 銀級、🥉 銅級、個人贊助
+   - [x] Speaker List -> SpeakerView
+   - [x] Staff List
+ - 🌐 Tab 3: Flitto（即時翻譯）
+   - 翻譯頁面
+ - 👤 Tab 4: 個人功能
+   - 編輯個人資料頁面
+   - 產生 QR Code 頁面（個人名片，有「我在參加 iPlayground 2025」字樣，適合截圖上傳，也適合合照時使用）
+   - 我喜愛的議程
+ - ℹ️ Tab 5: 關於
+   - 地點資訊
+     - 🗺️ 地址：用 Apple Maps 開啟、用 Google Maps 開啟
+     - 👀 MapKit + Look Around
+     - 🏢 主要場地平面圖
+     - 🎉 After Party 平面圖
+   - 重要連結
+     - 🌐 官網
+     - 📝 HackMD
+     - 📧 電子報
+     - 📺 YouTube
+     - 💬 Discord
+     - 💻 App 開源專案網址
+     - SessionData 開源專案網址
+     - 問卷網址
+     - 🐦 Twitter
+     - 🧵 Threads
+     - 🐘 Mastodon
+     - 👥 Facebook
+     - 使用到的開源套件
+     - App Store 連結
+     - App 版本資訊
 
 ---
 
