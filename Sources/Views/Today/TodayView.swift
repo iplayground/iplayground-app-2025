@@ -69,7 +69,6 @@ struct TodayView: View {
         while Task.isCancelled == false {
           try await Task.sleep(for: .seconds(15))
           nowSectionID += 1
-          print(nowSectionID)
         }
       }
     }
