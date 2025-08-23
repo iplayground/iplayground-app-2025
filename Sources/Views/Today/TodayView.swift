@@ -7,6 +7,7 @@ import SwiftUI
 @ViewAction(for: TodayFeature.self)
 struct TodayView: View {
   @Bindable var store: StoreOf<TodayFeature>
+  @State private var nowSectionID: Int = 0
 
   var body: some View {
     NavigationStack(
@@ -50,6 +51,7 @@ struct TodayView: View {
               },
               label: {
                 nowSection
+                  .id(nowSectionID)
               }
             )
             .buttonStyle(.plain)
@@ -63,7 +65,13 @@ struct TodayView: View {
       send(.task)
     }
     .task {
-      // TODO: refresh date per minute
+      Task {
+        while Task.isCancelled == false {
+          try await Task.sleep(for: .seconds(15))
+          nowSectionID += 1
+          print(nowSectionID)
+        }
+      }
     }
     .navigationTitle("議程與活動")
     .navigationBarTitleDisplayMode(.inline)
@@ -71,7 +79,6 @@ struct TodayView: View {
 
   @ViewBuilder
   private var nowSection: some View {
-
     if let startDate = store.day1Sessions.first?.dateInterval?.start,
       let endDate = store.day2Sessions.last?.dateInterval?.end
     {
