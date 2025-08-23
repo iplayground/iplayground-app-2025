@@ -123,17 +123,39 @@ package struct TodayFeature {
           await withThrowingTaskGroup(of: Void.self) { group in
             group.addTask {
               @Dependency(\.iPlaygroundDataClient) var client
-              let sessions = try await client.fetchSchedules(1)
+              let cachedSessions = try await client.fetchSchedules(1, .cacheFirst)
+              async let sessions = try await client.fetchSchedules(1, .remote)
               let day1Date = createDate(year: 2025, month: 8, day: 30)
-              let day1Sessions = sessions.map { SessionWrapper(date: day1Date, session: $0) }
-              await send(.binding(.set(\.day1Sessions, day1Sessions)))
+
+              let cached = cachedSessions.map {
+                SessionWrapper(date: day1Date, session: $0)
+              }
+              await send(.binding(.set(\.day1Sessions, cached)))
+
+              let remoteSessions = try await sessions.map {
+                SessionWrapper(date: day1Date, session: $0)
+              }
+              if remoteSessions != cached {
+                await send(.binding(.set(\.day1Sessions, remoteSessions)))
+              }
             }
             group.addTask {
               @Dependency(\.iPlaygroundDataClient) var client
-              let sessions = try await client.fetchSchedules(2)
+              let cachedSessions = try await client.fetchSchedules(2, .cacheFirst)
+              async let sessions = try await client.fetchSchedules(2, .remote)
               let day2Date = createDate(year: 2025, month: 8, day: 31)
-              let day2Sessions = sessions.map { SessionWrapper(date: day2Date, session: $0) }
-              await send(.binding(.set(\.day2Sessions, day2Sessions)))
+
+              let cached = cachedSessions.map {
+                SessionWrapper(date: day2Date, session: $0)
+              }
+              await send(.binding(.set(\.day2Sessions, cached)))
+
+              let remoteSessions = try await sessions.map {
+                SessionWrapper(date: day2Date, session: $0)
+              }
+              if remoteSessions != cached {
+                await send(.binding(.set(\.day2Sessions, remoteSessions)))
+              }
             }
           }
         }
@@ -157,7 +179,7 @@ package struct TodayFeature {
             await send(.navigateToSpeaker(speaker))
           } else {
             @Dependency(\.iPlaygroundDataClient) var client
-            guard let speaker = try await client.fetchSpeakers()[id: speakerID] else {
+            guard let speaker = try await client.fetchSpeakers(.remote)[id: speakerID] else {
               return
             }
             await send(.navigateToSpeaker(speaker))

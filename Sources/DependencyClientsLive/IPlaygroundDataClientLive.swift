@@ -10,21 +10,21 @@ extension IPlaygroundDataClient: DependencyKey {
     let dataLanguage = DataLanguage(localeIdentifier: Locale.preferredLanguages.first ?? "en")
     let client = SessionDataClient.live
     return IPlaygroundDataClient(
-      fetchSchedules: { day in
-        try await client.fetchSchedules(day, dataLanguage)
+      fetchSchedules: { day, strategy in
+        try await client.fetchSchedules(day, dataLanguage, strategy)
       },
-      fetchSpeakers: {
-        let speakers = try await client.fetchSpeakers(dataLanguage)
+      fetchSpeakers: { strategy in
+        let speakers = try await client.fetchSpeakers(dataLanguage, strategy)
         return IdentifiedArrayOf(uniqueElements: speakers)
       },
-      fetchSponsors: {
-        try await client.fetchSponsors()
+      fetchSponsors: { strategy in
+        try await client.fetchSponsors(strategy)
       },
-      fetchStaffs: {
-        try await client.fetchStaffs()
+      fetchStaffs: { strategy in
+        try await client.fetchStaffs(strategy)
       },
-      fetchLinks: {
-        try await client.fetchLinks()
+      fetchLinks: { strategy in
+        try await client.fetchLinks(strategy)
       }
     )
   }()

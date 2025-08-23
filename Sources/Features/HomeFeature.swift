@@ -42,22 +42,22 @@ package struct HomeFeature {
         await withThrowingTaskGroup(of: Void.self) { group in
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let speakers = try await client.fetchSpeakers()
+            let speakers = try await client.fetchSpeakers(.remote)
             await send(.binding(.set(\.speakers, speakers)))
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let sponsorData = try await client.fetchSponsors()
+            let sponsorData = try await client.fetchSponsors(.remote)
             await send(.binding(.set(\.sponsorData, sponsorData)))
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let staffs = try await client.fetchStaffs()
+            let staffs = try await client.fetchStaffs(.remote)
             await send(.binding(.set(\.staffs, staffs)))
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let links = try await client.fetchLinks()
+            let links = try await client.fetchLinks(.remote)
             await send(.binding(.set(\.links, links)))
           }
         }
