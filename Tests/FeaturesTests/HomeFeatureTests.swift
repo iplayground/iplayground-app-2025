@@ -16,16 +16,16 @@ final class HomeFeatureTests: XCTestCase {
     let store = TestStore(initialState: HomeFeature.State()) {
       HomeFeature()
     } withDependencies: {
-      $0.iPlaygroundDataClient.fetchSpeakers = {
+      $0.iPlaygroundDataClient.fetchSpeakers = { _ in
         return mockSpeakers
       }
-      $0.iPlaygroundDataClient.fetchSponsors = {
+      $0.iPlaygroundDataClient.fetchSponsors = { _ in
         return mockSponsors
       }
-      $0.iPlaygroundDataClient.fetchStaffs = {
+      $0.iPlaygroundDataClient.fetchStaffs = { _ in
         return mockStaffs
       }
-      $0.iPlaygroundDataClient.fetchLinks = {
+      $0.iPlaygroundDataClient.fetchLinks = { _ in
         [
           Link(
             id: "website", title: "官網", url: URL(string: "https://iplayground.io")!, icon: "globe",
