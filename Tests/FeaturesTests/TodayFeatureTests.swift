@@ -36,15 +36,15 @@ final class TodayFeatureTests: XCTestCase {
   }
 
   func testBindingDay1SessionsWithInitialLoad() async {
-    // Set now to 3 PM (15:00) so it's definitely after the session end time (10:00)  
+    // Set now to 3 PM (15:00) so it's definitely after the session end time (10:00)
     let today = createDate(year: 2025, month: 1, day: 15)
-    let now = today.addingTimeInterval(15 * 60 * 60) // 3 PM
+    let now = today.addingTimeInterval(15 * 60 * 60)  // 3 PM
 
     let day1Session = createMockSessionWrapper(
       timeRange: "08:00-10:00",
       title: "Day 1 Session",
-      start: today.addingTimeInterval(8 * 60 * 60), // 8 AM
-      end: today.addingTimeInterval(10 * 60 * 60)   // 10 AM
+      start: today.addingTimeInterval(8 * 60 * 60),  // 8 AM
+      end: today.addingTimeInterval(10 * 60 * 60)  // 10 AM
     )
 
     let store = TestStore(initialState: TodayFeature.State()) {
@@ -54,7 +54,7 @@ final class TodayFeatureTests: XCTestCase {
     }
 
     await store.send(\.binding.day1Sessions, [day1Session]) {
-      $0.day1Sessions = [day1Session]
+      $0.$day1Sessions.withLock { $0 = [day1Session] }
       $0.selectedDay = .day2
       $0.initialLoaded = true
     }
@@ -87,7 +87,7 @@ final class TodayFeatureTests: XCTestCase {
     }
 
     await store.send(\.binding.day1Sessions, [day1Session]) {
-      $0.day1Sessions = [day1Session]
+      $0.$day1Sessions.withLock { $0 = [day1Session] }
       $0.initialLoaded = true
     }
   }
@@ -103,7 +103,7 @@ final class TodayFeatureTests: XCTestCase {
     }
 
     await store.send(\.binding.day1Sessions, [day1Session]) {
-      $0.day1Sessions = [day1Session]
+      $0.$day1Sessions.withLock { $0 = [day1Session] }
     }
   }
 
@@ -119,7 +119,7 @@ final class TodayFeatureTests: XCTestCase {
 
   func testTapNowSectionWithCurrentSessionOnDay1() async {
     let sessionDate = createDate(year: 2025, month: 1, day: 15)
-    let now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60) // 10:30 AM
+    let now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)  // 10:30 AM
 
     let session = makeSession(
       time: "10:00-11:00",
@@ -133,7 +133,7 @@ final class TodayFeatureTests: XCTestCase {
     let currentSession = SessionWrapper(date: sessionDate, session: session)
 
     var initialState = TodayFeature.State()
-    initialState.day1Sessions = [currentSession]
+    initialState.$day1Sessions.withLock { $0 = [currentSession] }
     initialState.selectedDay = .day2
 
     let store = TestStore(initialState: initialState) {
@@ -149,7 +149,7 @@ final class TodayFeatureTests: XCTestCase {
 
   func testTapNowSectionWithCurrentSessionOnDay2() async {
     let sessionDate = createDate(year: 2025, month: 1, day: 15)
-    let now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60) // 10:30 AM
+    let now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)  // 10:30 AM
 
     let session = makeSession(
       time: "10:00-11:00",
@@ -163,7 +163,7 @@ final class TodayFeatureTests: XCTestCase {
     let currentSession = SessionWrapper(date: sessionDate, session: session)
 
     var initialState = TodayFeature.State()
-    initialState.day2Sessions = [currentSession]
+    initialState.$day2Sessions.withLock { $0 = [currentSession] }
     initialState.selectedDay = .day1
 
     let store = TestStore(initialState: initialState) {

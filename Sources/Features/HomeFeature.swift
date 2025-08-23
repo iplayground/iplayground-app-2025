@@ -7,12 +7,13 @@ import Models
 package struct HomeFeature {
   @ObservableState
   package struct State: Equatable {
-    @SharedReader(.day1Sessions) var day1Sessions: [SessionWrapper] = []
-    @SharedReader(.day2Sessions) var day2Sessions: [SessionWrapper] = []
-    @Shared(.speakers) var speakers: IdentifiedArrayOf<Speaker> = []
-    @Shared(.sponsorData) var sponsorData: SponsorsData = SponsorsData(sponsors: [], partner: [])
-    @Shared(.staffs) var staffs: [Staff] = []
-    @Shared(.links) var links: [Link] = []
+    @SharedReader(.day1Sessions) package var day1Sessions: [SessionWrapper] = []
+    @SharedReader(.day2Sessions) package var day2Sessions: [SessionWrapper] = []
+    @Shared(.speakers) package var speakers: IdentifiedArrayOf<Speaker> = []
+    @Shared(.sponsorData) package var sponsorData: SponsorsData = SponsorsData(
+      sponsors: [], partner: [])
+    @Shared(.staffs) package var staffs: [Staff] = []
+    @Shared(.links) package var links: [Link] = []
 
     package var today = TodayFeature.State()
 
