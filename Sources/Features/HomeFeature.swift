@@ -16,11 +16,16 @@ package struct HomeFeature {
     @Shared(.links) package var links: [Link] = []
 
     package var today = TodayFeature.State()
+    package var community = CommunityFeature.State()
+    package var about = AboutFeature.State()
 
     package init() {}
   }
 
   package enum Action: Equatable, BindableAction {
+    case today(TodayFeature.Action)
+    case community(CommunityFeature.Action)
+    case about(AboutFeature.Action)
     case binding(BindingAction<State>)
     case task
   }
@@ -28,12 +33,30 @@ package struct HomeFeature {
   package init() {}
 
   package var body: some ReducerOf<Self> {
+    Scope(state: \.today, action: \.today) {
+      TodayFeature()
+    }
+    Scope(state: \.community, action: \.community) {
+      CommunityFeature()
+    }
+    Scope(state: \.about, action: \.about) {
+      AboutFeature()
+    }
     BindingReducer()
     Reduce(core)
   }
 
   package func core(state: inout State, action: Action) -> Effect<Action> {
     switch action {
+    case .today:
+      return .none
+
+    case .community:
+      return .none
+
+    case .about:
+      return .none
+
     case .binding:
       return .none
 

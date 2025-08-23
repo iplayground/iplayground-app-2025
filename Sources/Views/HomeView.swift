@@ -13,19 +13,13 @@ struct HomeView: View {
     TabView {
       // Tab 1: Today
       TodayView(
-        store: .init(
-          initialState: TodayFeature.State(),
-          reducer: { TodayFeature() }
-        )
+        store: store.scope(state: \.today, action: \.today)
       )
       .tabItem { Label("議程與活動", systemImage: "calendar") }
 
       // Tab 2: Sponsors, Speakers, & Staff
       CommunityView(
-        store: .init(
-          initialState: CommunityFeature.State(),
-          reducer: { CommunityFeature() }
-        )
+        store: store.scope(state: \.community, action: \.community)
       )
       .tabItem { Label("社群", systemImage: "person.3") }
 
@@ -39,10 +33,7 @@ struct HomeView: View {
 
       // Tab 5: About
       AboutView(
-        store: .init(
-          initialState: AboutFeature.State(),
-          reducer: { AboutFeature() }
-        )
+        store: store.scope(state: \.about, action: \.about)
       )
       .tabItem { Label("關於", systemImage: "info.circle") }
     }
