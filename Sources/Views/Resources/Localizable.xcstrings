@@ -192,7 +192,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Apple Maps"
+            "value" : "Open in Apple Maps"
           }
         },
         "ja" : {
@@ -214,7 +214,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Google Maps"
+            "value" : "Open in Google Maps"
           }
         },
         "ja" : {
