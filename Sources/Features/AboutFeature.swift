@@ -7,7 +7,7 @@ import Models
 package struct AboutFeature {
   @ObservableState
   package struct State: Equatable {
-    package var links: [Link] = []
+    @SharedReader(.links) package var links: [Link] = []
     package var appVersion: String = ""
     package var buildNumber: String = ""
 
@@ -18,7 +18,6 @@ package struct AboutFeature {
   package enum Action: Equatable, BindableAction, ComposableArchitecture.ViewAction {
     case view(ViewAction)
     case binding(BindingAction<State>)
-    case linksLoaded([Link])
     case versionInfoLoaded(appVersion: String, buildNumber: String)
 
     @CasePathable
@@ -41,10 +40,6 @@ package struct AboutFeature {
     case .binding:
       return .none
 
-    case let .linksLoaded(links):
-      state.links = links
-      return .none
-
     case let .versionInfoLoaded(appVersion, buildNumber):
       state.appVersion = appVersion
       state.buildNumber = buildNumber
@@ -55,15 +50,6 @@ package struct AboutFeature {
       case .task:
         return .run { send in
           await withThrowingTaskGroup(of: Void.self) { group in
-            group.addTask {
-              @Dependency(\.iPlaygroundDataClient) var iPlaygroundDataClient
-              do {
-                let links = try await iPlaygroundDataClient.fetchLinks()
-                await send(.linksLoaded(links))
-              } catch {
-                await send(.linksLoaded([]))
-              }
-            }
             group.addTask {
               let appVersion =
                 Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"

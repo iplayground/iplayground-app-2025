@@ -17,9 +17,10 @@ package struct CommunityFeature {
     package var path = StackState<Path.State>()
 
     package var selectedTab: Tab = .sponsor
-    package var speakers: IdentifiedArrayOf<Speaker> = []
-    package var sponsorData: SponsorsData = SponsorsData(sponsors: [], partner: [])
-    package var staffs: [Staff] = []
+    @SharedReader(.speakers) package var speakers: IdentifiedArrayOf<Speaker> = []
+    @SharedReader(.sponsorData) package var sponsorData: SponsorsData = SponsorsData(
+      sponsors: [], partner: [])
+    @SharedReader(.staffs) package var staffs: [Staff] = []
 
     package init() {}
   }
@@ -63,25 +64,7 @@ package struct CommunityFeature {
     case let .view(viewAction):
       switch viewAction {
       case .task:
-        return .run { send in
-          await withThrowingTaskGroup(of: Void.self) { group in
-            group.addTask {
-              @Dependency(\.iPlaygroundDataClient) var iPlaygroundDataClient
-              let speakers = try await iPlaygroundDataClient.fetchSpeakers()
-              await send(.binding(.set(\.speakers, speakers)))
-            }
-            group.addTask {
-              @Dependency(\.iPlaygroundDataClient) var iPlaygroundDataClient
-              let sponsorData = try await iPlaygroundDataClient.fetchSponsors()
-              await send(.binding(.set(\.sponsorData, sponsorData)))
-            }
-            group.addTask {
-              @Dependency(\.iPlaygroundDataClient) var iPlaygroundDataClient
-              let staffs = try await iPlaygroundDataClient.fetchStaffs()
-              await send(.binding(.set(\.staffs, staffs)))
-            }
-          }
-        }
+        return .none
 
       case .tapSpeaker(let speaker):
         state.path.append(.speaker(.init(speaker: speaker)))

@@ -8,11 +8,12 @@ package struct TodayFeature {
   @ObservableState
   package struct State: Equatable {
     package var path = StackState<Path.State>()
-    package var day1Sessions: [SessionWrapper] = []
-    package var day2Sessions: [SessionWrapper] = []
+    @Shared(.day1Sessions) package var day1Sessions: [SessionWrapper] = []
+    @Shared(.day2Sessions) package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
     package var searchText: String = ""
 
+    @SharedReader(.speakers) var speakers: IdentifiedArrayOf<Speaker> = []
     var initialLoaded = false
 
     package var allSessions: [SessionWrapper] {
@@ -151,12 +152,16 @@ package struct TodayFeature {
         guard let speakerID = session.speakerID else {
           return .none
         }
-        return .run { send in
-          @Dependency(\.iPlaygroundDataClient) var client
-          guard let speaker = try await client.fetchSpeakers()[id: speakerID] else {
-            return
+        return .run { [speakers = state.speakers] send in
+          if let speaker = speakers[id: speakerID] {
+            await send(.navigateToSpeaker(speaker))
+          } else {
+            @Dependency(\.iPlaygroundDataClient) var client
+            guard let speaker = try await client.fetchSpeakers()[id: speakerID] else {
+              return
+            }
+            await send(.navigateToSpeaker(speaker))
           }
-          await send(.navigateToSpeaker(speaker))
         }
       }
 
