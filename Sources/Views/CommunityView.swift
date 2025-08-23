@@ -130,14 +130,20 @@ struct CommunityView: View {
     HStack {
       let logoSize: CGFloat = 80
       if let logoURL = logoURL {
-        AsyncImage(url: logoURL) { image in
-          image
-            .resizable()
-            .scaledToFit()
-            .frame(width: logoSize, height: logoSize)
-        } placeholder: {
-          Image(systemName: "building.2")
-            .frame(width: logoSize, height: logoSize)
+        CachedAsyncImage(url: logoURL) { phase in
+          switch phase {
+          case let .success(image):
+            image
+              .resizable()
+              .scaledToFit()
+              .frame(width: logoSize, height: logoSize)
+          case .failure, .empty:
+            Image(systemName: "building.2")
+              .frame(width: logoSize, height: logoSize)
+          @unknown default:
+            Image(systemName: "building.2")
+              .frame(width: logoSize, height: logoSize)
+          }
         }
       } else {
         Image(systemName: "building.2")
@@ -165,16 +171,21 @@ struct CommunityView: View {
     HStack {
       let avatarSize: CGFloat = 40
       if let photoURL = photoURL {
-        // FIXME: Cache image
-        AsyncImage(url: photoURL) { image in
-          image
-            .resizable()
-            .scaledToFill()
-            .frame(width: avatarSize, height: avatarSize)
-            .clipShape(Circle())
-        } placeholder: {
-          Image(systemName: "person.fill")
-            .frame(width: avatarSize, height: avatarSize)
+        CachedAsyncImage(url: photoURL) { phase in
+          switch phase {
+          case let .success(image):
+            image
+              .resizable()
+              .scaledToFill()
+              .frame(width: avatarSize, height: avatarSize)
+              .clipShape(Circle())
+          case .failure, .empty:
+            Image(systemName: "person.fill")
+              .frame(width: avatarSize, height: avatarSize)
+          @unknown default:
+            Image(systemName: "person.fill")
+              .frame(width: avatarSize, height: avatarSize)
+          }
         }
       } else {
         Image(systemName: "person.fill")

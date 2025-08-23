@@ -40,18 +40,29 @@ struct SpeakerView: View {
     Group {
       if let photoURL = store.speaker.photo {
         let avatarSize: CGFloat = 80
-        // FIXME: Cache image
-        AsyncImage(url: photoURL) { image in
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: avatarSize, height: avatarSize)
-            .clipShape(Circle())
-        } placeholder: {
-          Circle()
-            .fill(Color.gray.opacity(0.2))
-            .frame(width: avatarSize, height: avatarSize)
+        CachedAsyncImage(url: photoURL) { phase in
+          switch phase {
+          case let .success(image):
+            image
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+              .frame(width: avatarSize, height: avatarSize)
+              .clipShape(Circle())
+          case .failure, .empty:
+            Circle()
+              .fill(Color.gray.opacity(0.2))
+              .frame(width: avatarSize, height: avatarSize)
+          @unknown default:
+            Circle()
+              .fill(Color.gray.opacity(0.2))
+              .frame(width: avatarSize, height: avatarSize)
+          }
         }
+      } else {
+        let avatarSize: CGFloat = 80
+        Circle()
+          .fill(Color.gray.opacity(0.2))
+          .frame(width: avatarSize, height: avatarSize)
       }
     }
   }
