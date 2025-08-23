@@ -131,7 +131,7 @@ struct SpeakerView: View {
       urlMenuButton(url: linkedin, title: "LinkedIn")
     }
     if let x = store.speaker.x {
-      urlMenuButton(url: x, title: "X (Twitter)")
+      urlMenuButton(url: x, title: "Twitter (X)")
     }
     if let threads = store.speaker.threads {
       urlMenuButton(url: threads, title: "Threads")

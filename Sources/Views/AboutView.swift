@@ -104,7 +104,9 @@ package struct AboutView: View {
             Label(
               title: {
                 Text("政大公企中心")
+                  .multilineTextAlignment(.leading)
                 Text("台北市大安區金華街 187 號")
+                  .multilineTextAlignment(.leading)
               },
               icon: {
                 Image(systemName: "mappin.and.ellipse")

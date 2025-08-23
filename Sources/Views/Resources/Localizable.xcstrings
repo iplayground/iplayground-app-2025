@@ -11,6 +11,12 @@
             "state" : "translated",
             "value" : "App Information"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ情報"
+          }
         }
       }
     },
@@ -19,7 +25,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Countdown: $@"
+            "value" : "Countdown: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カウントダウン: %@"
           }
         }
       }
@@ -31,15 +43,28 @@
             "state" : "translated",
             "value" : "The conference is over. Thanks for joining us!"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今年のカンファレンスは終了しました。ご参加いただきありがとうございました！"
+          }
         }
       }
     },
     "再接下來：%@ %@%@" : {
+      "comment" : "再接下來的時段、講題、講者",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "And Next: %1$@ %2$@%3$@"
+            "value" : "Up Next: %1$@ %2$@%3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次の予定: %1$@ %2$@%3$@"
           }
         },
         "zh-Hant" : {
@@ -56,6 +81,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Live Translation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リアルタイム翻訳"
           }
         }
       }
@@ -83,6 +114,12 @@
             "state" : "translated",
             "value" : "Venue"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会場"
+          }
         }
       }
     },
@@ -92,6 +129,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Staff"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタッフ"
           }
         }
       }
@@ -103,6 +146,12 @@
             "state" : "translated",
             "value" : "My"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイ"
+          }
         }
       }
     },
@@ -112,6 +161,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Apple Maps"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple マップで開く"
           }
         },
         "zh-Hant" : {
@@ -130,6 +185,12 @@
             "value" : "Open Google Maps"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google マップで開く"
+          }
+        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
@@ -145,15 +206,28 @@
             "state" : "translated",
             "value" : "Copy"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コピー"
+          }
         }
       }
     },
     "接下來：%@ %@%@" : {
+      "comment" : "接下來的時段、講題、講者",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next: %1$@ %2$@%3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次: %1$@ %2$@%3$@"
           }
         },
         "zh-Hant" : {
@@ -187,6 +261,12 @@
             "state" : "translated",
             "value" : "App Version"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリバージョン"
+          }
         }
       }
     },
@@ -196,6 +276,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Community"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コミュニティ"
           }
         }
       }
@@ -207,6 +293,12 @@
             "state" : "translated",
             "value" : "Social"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソーシャル"
+          }
         }
       }
     },
@@ -216,6 +308,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Day 1"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1日目"
           }
         }
       }
@@ -227,6 +325,12 @@
             "state" : "translated",
             "value" : "Day 2"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2日目"
+          }
         }
       }
     },
@@ -236,6 +340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Speaker"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スピーカー"
           }
         }
       }
@@ -247,6 +357,12 @@
             "state" : "translated",
             "value" : "Sessions"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セッション"
+          }
         }
       }
     },
@@ -257,15 +373,28 @@
             "state" : "translated",
             "value" : "Sponsors"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スポンサー"
+          }
         }
       }
     },
     "進行中：%@%@（剩餘：%@）" : {
+      "comment" : "進行中的講題、講者，以及剩餘時間",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In Progress: %1$@%2$@(Remaining: %3$@)"
+            "value" : "In Progress: %1$@%2$@ (Remaining: %3$@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "進行中: %1$@%2$@（残り: %3$@）"
           }
         },
         "zh-Hant" : {
@@ -283,6 +412,12 @@
             "state" : "translated",
             "value" : "Important Links"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重要なリンク"
+          }
         }
       }
     },
@@ -292,6 +427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "About"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "について"
           }
         }
       }
