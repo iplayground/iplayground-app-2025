@@ -122,7 +122,7 @@ struct SpeakerView: View {
   @ViewBuilder
   private var socialLinks: some View {
     if let website = store.speaker.url {
-      urlMenuButton(url: website, title: "網站")
+      urlMenuButton(url: website, title: String(localized: "網站", bundle: .module))
     }
     if let github = store.speaker.github {
       urlMenuButton(url: github, title: "GitHub")

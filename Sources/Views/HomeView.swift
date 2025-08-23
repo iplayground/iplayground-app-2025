@@ -15,27 +15,27 @@ struct HomeView: View {
       TodayView(
         store: store.scope(state: \.today, action: \.today)
       )
-      .tabItem { Label("議程與活動", systemImage: "calendar") }
+      .tabItem { Label(String(localized: "議程與活動", bundle: .module), systemImage: "calendar") }
 
       // Tab 2: Sponsors, Speakers, & Staff
       CommunityView(
         store: store.scope(state: \.community, action: \.community)
       )
-      .tabItem { Label("社群", systemImage: "person.3") }
+      .tabItem { Label(String(localized: "社群", bundle: .module), systemImage: "person.3") }
 
       // Tab 3: Flitto (Live Translation)
       Text(verbatim: "Flitto")
-        .tabItem { Label("即時翻譯", systemImage: "globe") }
+        .tabItem { Label(String(localized: "即時翻譯", bundle: .module), systemImage: "globe") }
 
       // Tab 4: My
-      Text("我的")
-        .tabItem { Label("我的", systemImage: "bookmark") }
+      Text("我的", bundle: .module)
+        .tabItem { Label(String(localized: "我的", bundle: .module), systemImage: "bookmark") }
 
       // Tab 5: About
       AboutView(
         store: store.scope(state: \.about, action: \.about)
       )
-      .tabItem { Label("關於", systemImage: "info.circle") }
+      .tabItem { Label(String(localized: "關於", bundle: .module), systemImage: "info.circle") }
     }
     .task {
       await store.send(.task).finish()

@@ -37,7 +37,7 @@ package struct AboutView: View {
         socialMediaSection
         appInfoSection
       }
-      .navigationTitle("關於")
+      .navigationTitle(String(localized: "關於", bundle: .module))
       .navigationBarTitleDisplayMode(.inline)
       .task {
         send(.task)
@@ -54,20 +54,20 @@ package struct AboutView: View {
         "https://maps.apple.com/place?coordinate=25.030146,121.527629&place-id=IC4414FF248A5DFE5"
     )!,
     label: {
-      Label("打開 Apple 地圖", systemImage: "map")
+      Label(String(localized: "打開 Apple 地圖", bundle: .module), systemImage: "map")
     }
   )
 
   private let googleMapsLink = SwiftUI.Link(
     destination: URL(string: "https://maps.app.goo.gl/un36yK3ptkxnUiTE6")!,
     label: {
-      Label("打開 Google 地圖", systemImage: "map")
+      Label(String(localized: "打開 Google 地圖", bundle: .module), systemImage: "map")
     }
   )
 
   @ViewBuilder
   private var mapSection: some View {
-    Section("場地") {
+    Section(String(localized: "場地", bundle: .module)) {
       HStack {
         Menu(
           content: {
@@ -76,7 +76,7 @@ package struct AboutView: View {
           },
           label: {
             Map(initialPosition: initialMapPosition) {
-              Annotation("政大公企中心", coordinate: coordinate) {
+              Annotation(String(localized: "政大公企中心", bundle: .module), coordinate: coordinate) {
                 Image(systemName: "mappin.and.ellipse")
               }
             }
@@ -103,9 +103,9 @@ package struct AboutView: View {
           VStack {
             Label(
               title: {
-                Text("政大公企中心")
+                Text("政大公企中心", bundle: .module)
                   .multilineTextAlignment(.leading)
-                Text("台北市大安區金華街 187 號")
+                Text("台北市大安區金華街 187 號", bundle: .module)
                   .multilineTextAlignment(.leading)
               },
               icon: {
@@ -133,7 +133,7 @@ package struct AboutView: View {
 
   @ViewBuilder
   private var importantLinksSection: some View {
-    Section("重要連結") {
+    Section(String(localized: "重要連結", bundle: .module)) {
       ForEach(importantLinks) { link in
         urlMenuButton(link: link)
       }
@@ -143,7 +143,7 @@ package struct AboutView: View {
   @ViewBuilder
   private var socialMediaSection: some View {
     if !socialMediaLinks.isEmpty {
-      Section("社群媒體") {
+      Section(String(localized: "社群媒體", bundle: .module)) {
         ForEach(socialMediaLinks) { link in
           urlMenuButton(link: link)
         }
@@ -153,14 +153,14 @@ package struct AboutView: View {
 
   @ViewBuilder
   private var appInfoSection: some View {
-    Section("App 資訊") {
+    Section(String(localized: "App 資訊", bundle: .module)) {
       ForEach(appInfoLinks) { link in
         urlMenuButton(link: link)
       }
 
       if !store.appVersion.isEmpty {
         HStack {
-          Label("版本資訊", systemImage: "info.circle")
+          Label(String(localized: "版本資訊", bundle: .module), systemImage: "info.circle")
           Spacer()
           Text(verbatim: "\(store.appVersion) (\(store.buildNumber))")
             .foregroundColor(.secondary)
@@ -201,7 +201,7 @@ package struct AboutView: View {
         send(.tapCopyURL(url))
       },
       label: {
-        Label("拷貝", systemImage: "document.on.document")
+        Label(String(localized: "拷貝", bundle: .module), systemImage: "document.on.document")
       }
     )
   }

@@ -72,7 +72,7 @@ struct TodayView: View {
         }
       }
     }
-    .navigationTitle("議程與活動")
+    .navigationTitle(String(localized: "議程與活動", bundle: .module))
     .navigationBarTitleDisplayMode(.inline)
   }
 
@@ -88,14 +88,15 @@ struct TodayView: View {
         HStack {
           let duration = Duration.seconds(startDate.timeIntervalSince(now))
           Text(
-            "iPlayground 倒數中：\(Text(duration.formatted(.units(allowed: [.days, .hours, .minutes],width: .narrow))))"
+            "iPlayground 倒數中：\(Text(duration.formatted(.units(allowed: [.days, .hours, .minutes],width: .narrow))))",
+            bundle: .module
           )
           Spacer()
         }
       } else if now > endDate {
         // 情況 2：活動已結束
         HStack {
-          Text("今年的活動已結束，感謝您的參與！")
+          Text("今年的活動已結束，感謝您的參與！", bundle: .module)
           Spacer()
         }
       } else if let currentSession = store.currentSession {
@@ -107,17 +108,21 @@ struct TodayView: View {
             Text(
               """
               進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
-              """)
+              """,
+              bundle: .module
+            )
 
             if let nextSession = store.nextSession {
               Text(
-                "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")"
+                "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
+                bundle: .module
               )
             }
 
             if let nextNextSession = store.nextNextSession {
               Text(
-                "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")"
+                "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
+                bundle: .module
               )
             }
           }
@@ -131,7 +136,7 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text(day.localizedStringKey)
+        Text(day.localizedStringKey, bundle: .module)
           .tag(day)
       }
     }

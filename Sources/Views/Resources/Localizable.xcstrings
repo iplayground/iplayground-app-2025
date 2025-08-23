@@ -334,6 +334,22 @@
         }
       }
     },
+    "網站" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウェブサイト"
+          }
+        }
+      }
+    },
     "講者" : {
       "localizations" : {
         "en" : {

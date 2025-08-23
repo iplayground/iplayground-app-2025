@@ -40,7 +40,7 @@ struct CommunityView: View {
         staffsView
       }
     }
-    .navigationTitle("社群")
+    .navigationTitle(String(localized: "社群", bundle: .module))
     .navigationBarTitleDisplayMode(.inline)
     .task {
       send(.task)
@@ -51,7 +51,7 @@ struct CommunityView: View {
   private var tabs: some View {
     Picker("", selection: $store.selectedTab) {
       ForEach(CommunityFeature.Tab.allCases) { tab in
-        Text(tab.localizedStringKey)
+        Text(tab.localizedStringKey, bundle: .module)
           .tag(tab)
       }
     }
@@ -63,7 +63,7 @@ struct CommunityView: View {
   @ViewBuilder
   private var sponsorsView: some View {
     Color.clear.overlay {
-      Text("贊助商")
+      Text("贊助商", bundle: .module)
     }
   }
 
