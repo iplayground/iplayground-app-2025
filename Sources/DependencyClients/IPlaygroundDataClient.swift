@@ -9,6 +9,7 @@ public struct IPlaygroundDataClient: Sendable {
   public var fetchSpeakers: @Sendable () async throws -> IdentifiedArrayOf<Speaker>
   public var fetchSponsors: @Sendable () async throws -> SponsorsData
   public var fetchStaffs: @Sendable () async throws -> [Staff]
+  public var fetchLinks: @Sendable () async throws -> [Link]
 }
 
 extension IPlaygroundDataClient: TestDependencyKey {
@@ -30,6 +31,10 @@ extension IPlaygroundDataClient: TestDependencyKey {
     fetchStaffs: {
       let client = SessionDataClient.live
       return try await client.fetchStaffs()
+    },
+    fetchLinks: {
+      let client = SessionDataClient.live
+      return try await client.fetchLinks()
     }
   )
 }

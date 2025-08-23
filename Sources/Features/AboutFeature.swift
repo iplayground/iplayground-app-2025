@@ -1,0 +1,90 @@
+import ComposableArchitecture
+import DependencyClients
+import Foundation
+import Models
+
+@Reducer
+package struct AboutFeature {
+  @ObservableState
+  package struct State: Equatable {
+    package var links: [Link] = []
+    package var appVersion: String = ""
+    package var buildNumber: String = ""
+
+    package init() {}
+  }
+
+  @CasePathable
+  package enum Action: Equatable, BindableAction, ComposableArchitecture.ViewAction {
+    case view(ViewAction)
+    case binding(BindingAction<State>)
+    case linksLoaded([Link])
+    case versionInfoLoaded(appVersion: String, buildNumber: String)
+
+    @CasePathable
+    package enum ViewAction: Equatable {
+      case task
+      case tapURL(URL)
+      case tapCopyURL(URL)
+    }
+  }
+
+  package init() {}
+
+  package var body: some ReducerOf<Self> {
+    BindingReducer()
+    Reduce(core)
+  }
+
+  package func core(state: inout State, action: Action) -> Effect<Action> {
+    switch action {
+    case .binding:
+      return .none
+
+    case let .linksLoaded(links):
+      state.links = links
+      return .none
+
+    case let .versionInfoLoaded(appVersion, buildNumber):
+      state.appVersion = appVersion
+      state.buildNumber = buildNumber
+      return .none
+
+    case let .view(viewAction):
+      switch viewAction {
+      case .task:
+        return .run { send in
+          await withThrowingTaskGroup(of: Void.self) { group in
+            group.addTask {
+              @Dependency(\.iPlaygroundDataClient) var iPlaygroundDataClient
+              do {
+                let links = try await iPlaygroundDataClient.fetchLinks()
+                await send(.linksLoaded(links))
+              } catch {
+                await send(.linksLoaded([]))
+              }
+            }
+            group.addTask {
+              let appVersion =
+                Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+              let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+              await send(.versionInfoLoaded(appVersion: appVersion, buildNumber: buildNumber))
+            }
+          }
+        }
+
+      case let .tapURL(url):
+        return .run { _ in
+          @Dependency(\.openURL) var openURL
+          await openURL(url)
+        }
+
+      case let .tapCopyURL(url):
+        return .run { _ in
+          @Dependency(\.pasteboardClient) var pasteboardClient
+          pasteboardClient.copy(url.absoluteString)
+        }
+      }
+    }
+  }
+}

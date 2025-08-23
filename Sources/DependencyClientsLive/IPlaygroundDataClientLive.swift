@@ -22,6 +22,10 @@ extension IPlaygroundDataClient: DependencyKey {
     fetchStaffs: {
       let client = SessionDataClient.live
       return try await client.fetchStaffs()
+    },
+    fetchLinks: {
+      let client = SessionDataClient.live
+      return try await client.fetchLinks()
     }
   )
 }

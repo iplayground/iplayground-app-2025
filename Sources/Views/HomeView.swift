@@ -38,8 +38,13 @@ struct HomeView: View {
         .tabItem { Label("我的", systemImage: "bookmark") }
 
       // Tab 5: About
-      Text("About")
-        .tabItem { Label("關於", systemImage: "info.circle") }
+      AboutView(
+        store: .init(
+          initialState: AboutFeature.State(),
+          reducer: { AboutFeature() }
+        )
+      )
+      .tabItem { Label("關於", systemImage: "info.circle") }
     }
     .task {
       await store.send(.task).finish()
