@@ -11,7 +11,7 @@ package struct HomeFeature {
     @SharedReader(.day2Sessions) package var day2Sessions: [SessionWrapper] = []
     @Shared(.speakers) package var speakers: IdentifiedArrayOf<Speaker> = []
     @Shared(.sponsorData) package var sponsorData: SponsorsData = SponsorsData(
-      sponsors: [], partner: [])
+      sponsors: [], personal: [], partner: [])
     @Shared(.staffs) package var staffs: [Staff] = []
     @Shared(.links) package var links: [Link] = []
 

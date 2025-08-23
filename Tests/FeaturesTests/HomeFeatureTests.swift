@@ -10,7 +10,7 @@ final class HomeFeatureTests: XCTestCase {
     let mockSpeakers = IdentifiedArrayOf<Speaker>(uniqueElements: [
       createMockSpeaker(id: 1), createMockSpeaker(id: 2),
     ])
-    let mockSponsors = SponsorsData(sponsors: [], partner: [])
+    let mockSponsors = SponsorsData(sponsors: [], personal: [], partner: [])
     let mockStaffs = [createMockStaff()]
 
     let store = TestStore(initialState: HomeFeature.State()) {

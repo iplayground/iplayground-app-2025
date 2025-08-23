@@ -52,6 +52,22 @@
         }
       }
     },
+    "個人贊助" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Individual Sponsors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "個人スポンサー"
+          }
+        }
+      }
+    },
     "再接下來：%@ %@%@" : {
       "comment" : "再接下來的時段、講題、講者",
       "localizations" : {
@@ -103,6 +119,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No. 187, Jinhua St., Da'an Dist., Taipei City, Taiwan"
+          }
+        }
+      }
+    },
+    "合作夥伴" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partners"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "パートナー"
           }
         }
       }
@@ -266,6 +298,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "アプリバージョン"
+          }
+        }
+      }
+    },
+    "特別贊助" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Special Sponsors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "特別スポンサー"
+          }
+        }
+      }
+    },
+    "白銀級贊助商" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Silver Sponsors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "シルバースポンサー"
           }
         }
       }
@@ -437,6 +501,22 @@
         }
       }
     },
+    "鑽石級贊助商" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diamond Sponsors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダイヤモンドスポンサー"
+          }
+        }
+      }
+    },
     "關於" : {
       "localizations" : {
         "en" : {
@@ -449,6 +529,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "について"
+          }
+        }
+      }
+    },
+    "青銅級贊助商" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bronze Sponsors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ブロンズスポンサー"
           }
         }
       }

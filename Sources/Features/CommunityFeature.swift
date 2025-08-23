@@ -19,7 +19,7 @@ package struct CommunityFeature {
     package var selectedTab: Tab = .sponsor
     @SharedReader(.speakers) package var speakers: IdentifiedArrayOf<Speaker> = []
     @SharedReader(.sponsorData) package var sponsorData: SponsorsData = SponsorsData(
-      sponsors: [], partner: [])
+      sponsors: [], personal: [], partner: [])
     @SharedReader(.staffs) package var staffs: [Staff] = []
 
     package init() {}

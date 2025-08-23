@@ -62,15 +62,97 @@ struct CommunityView: View {
 
   @ViewBuilder
   private var sponsorsView: some View {
-    Color.clear.overlay {
-      Text("贊助商", bundle: .module)
+    List {
+      Section(String(localized: "鑽石級贊助商", bundle: .module)) {
+        ForEach(
+          store.sponsorData.sponsors.first(where: { $0.title == "鑽石級" })?.items ?? [], id: \.name
+        ) { sponsor in
+          sponsorCell(name: sponsor.name, logoURL: sponsor.picture, url: sponsor.link)
+        }
+      }
+
+      Section(String(localized: "白銀級贊助商", bundle: .module)) {
+        ForEach(
+          store.sponsorData.sponsors.first(where: { $0.title == "白銀級" })?.items ?? [], id: \.name
+        ) { sponsor in
+          sponsorCell(name: sponsor.name, logoURL: sponsor.picture, url: sponsor.link)
+        }
+      }
+
+      Section(String(localized: "青銅級贊助商", bundle: .module)) {
+        ForEach(
+          store.sponsorData.sponsors.first(where: { $0.title == "青銅級" })?.items ?? [], id: \.name
+        ) { sponsor in
+          sponsorCell(name: sponsor.name, logoURL: sponsor.picture, url: sponsor.link)
+        }
+      }
+
+      Section(String(localized: "特別贊助", bundle: .module)) {
+        ForEach(
+          store.sponsorData.sponsors.first(where: { $0.title == "特別贊助" })?.items ?? [], id: \.name
+        ) { sponsor in
+          sponsorCell(name: sponsor.name, logoURL: sponsor.picture, url: sponsor.link)
+        }
+      }
+
+      Section(String(localized: "個人贊助", bundle: .module)) {
+        ForEach(store.sponsorData.personal, id: \.name) { sponsor in
+          personCell(
+            name: sponsor.name,
+            title: nil,
+            photoURL: sponsor.icon,
+            navigationIndicator: sponsor.link.map { .link($0) } ?? .empty
+          )
+        }
+      }
+
+      Section(String(localized: "合作夥伴", bundle: .module)) {
+        ForEach(store.sponsorData.partner, id: \.name) { partner in
+          sponsorCell(name: partner.name, logoURL: partner.icon, url: partner.link)
+        }
+      }
     }
+    .contentMargins(.bottom, -4, for: .scrollIndicators)
   }
 
   enum NavigationIndicator {
     case link(URL)
     case chevron
     case empty
+  }
+
+  @ViewBuilder
+  private func sponsorCell(
+    name: String,
+    logoURL: URL?,
+    url: URL?
+  ) -> some View {
+    HStack {
+      let logoSize: CGFloat = 80
+      if let logoURL = logoURL {
+        AsyncImage(url: logoURL) { image in
+          image
+            .resizable()
+            .scaledToFit()
+            .frame(width: logoSize, height: logoSize)
+        } placeholder: {
+          Image(systemName: "building.2")
+            .frame(width: logoSize, height: logoSize)
+        }
+      } else {
+        Image(systemName: "building.2")
+          .frame(width: logoSize, height: logoSize)
+      }
+
+      Text(name)
+        .font(.headline)
+
+      Spacer()
+
+      if let url = url {
+        Link(destination: url, label: { Image(systemName: "arrow.up.right.square") })
+      }
+    }
   }
 
   @ViewBuilder
