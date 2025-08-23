@@ -67,7 +67,7 @@ package struct AboutView: View {
 
   @ViewBuilder
   private var mapSection: some View {
-    Section("地點") {
+    Section("場地") {
       HStack {
         Menu(
           content: {
@@ -160,7 +160,7 @@ package struct AboutView: View {
         HStack {
           Label("版本資訊", systemImage: "info.circle")
           Spacer()
-          Text("\(store.appVersion) (\(store.buildNumber))")
+          Text(verbatim: "\(store.appVersion) (\(store.buildNumber))")
             .foregroundColor(.secondary)
         }
       }

@@ -30,11 +30,11 @@ struct HomeView: View {
       .tabItem { Label("社群", systemImage: "person.3") }
 
       // Tab 3: Flitto (Live Translation)
-      Text("Flitto")
+      Text(verbatim: "Flitto")
         .tabItem { Label("即時翻譯", systemImage: "globe") }
 
       // Tab 4: My
-      Text("My")
+      Text("我的")
         .tabItem { Label("我的", systemImage: "bookmark") }
 
       // Tab 5: About

@@ -92,11 +92,13 @@
 				};
 			};
 			buildConfigurationList = 6C1872722E2F320200AC4610 /* Build configuration list for PBXProject "iPlayground" */;
-			developmentRegion = en;
+			developmentRegion = "zh-Hant";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hant",
+				ja,
 			);
 			mainGroup = 6C18726E2E2F320200AC4610;
 			minimizedProjectReferenceProxies = 1;

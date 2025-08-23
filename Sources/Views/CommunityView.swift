@@ -63,7 +63,7 @@ struct CommunityView: View {
   @ViewBuilder
   private var sponsorsView: some View {
     Color.clear.overlay {
-      Text("Sponsors")
+      Text("贊助商")
     }
   }
 

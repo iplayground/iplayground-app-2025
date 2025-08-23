@@ -1,5 +1,6 @@
 import Dependencies
 import DependenciesMacros
+import Foundation
 import IdentifiedCollections
 import SessionData
 
@@ -14,29 +15,28 @@ public struct IPlaygroundDataClient: Sendable {
 
 extension IPlaygroundDataClient: TestDependencyKey {
   public static let testValue = Self()
-  public static let previewValue = IPlaygroundDataClient(
-    fetchSchedules: { day in
-      let client = SessionDataClient.live
-      return try await client.fetchSchedules(day)
-    },
-    fetchSpeakers: {
-      let client = SessionDataClient.live
-      let speakers = try await client.fetchSpeakers()
-      return IdentifiedArrayOf(uniqueElements: speakers)
-    },
-    fetchSponsors: {
-      let client = SessionDataClient.live
-      return try await client.fetchSponsors()
-    },
-    fetchStaffs: {
-      let client = SessionDataClient.live
-      return try await client.fetchStaffs()
-    },
-    fetchLinks: {
-      let client = SessionDataClient.live
-      return try await client.fetchLinks()
-    }
-  )
+  public static let previewValue: IPlaygroundDataClient = {
+    let dataLanguage = DataLanguage(localeIdentifier: Locale.preferredLanguages.first ?? "en")
+    let client = SessionDataClient.local
+    return IPlaygroundDataClient(
+      fetchSchedules: { day in
+        try await client.fetchSchedules(day, dataLanguage)
+      },
+      fetchSpeakers: {
+        let speakers = try await client.fetchSpeakers(dataLanguage)
+        return IdentifiedArrayOf(uniqueElements: speakers)
+      },
+      fetchSponsors: {
+        try await client.fetchSponsors()
+      },
+      fetchStaffs: {
+        try await client.fetchStaffs()
+      },
+      fetchLinks: {
+        try await client.fetchLinks()
+      }
+    )
+  }()
 }
 
 extension DependencyValues {
