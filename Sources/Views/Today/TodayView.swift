@@ -31,6 +31,7 @@ struct TodayView: View {
         }
         .listStyle(.inset)
         .contentMargins(.vertical, -4, for: .scrollIndicators)
+        .searchable(text: $store.searchText)
         .safeAreaInset(edge: .bottom) {
           VStack {
             Button(

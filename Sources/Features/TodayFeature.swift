@@ -11,6 +11,8 @@ package struct TodayFeature {
     package var day1Sessions: [SessionWrapper] = []
     package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
+    package var searchText: String = ""
+
     var initialLoaded = false
 
     package var allSessions: [SessionWrapper] {
@@ -18,9 +20,23 @@ package struct TodayFeature {
     }
 
     package var currentSessions: [SessionWrapper] {
-      switch selectedDay {
-      case .day1: return day1Sessions
-      case .day2: return day2Sessions
+      let sessions: [SessionWrapper] = {
+        switch selectedDay {
+        case .day1: day1Sessions
+        case .day2: day2Sessions
+        }
+      }()
+
+      if searchText.isEmpty {
+        return sessions
+      } else {
+        return sessions.filter {
+          $0.title.localizedCaseInsensitiveContains(searchText)
+            || $0.timeRange.localizedCaseInsensitiveContains(searchText)
+            || $0.speaker.localizedCaseInsensitiveContains(searchText)
+            || $0.tags?.localizedCaseInsensitiveContains(searchText) ?? false
+            || $0.description?.localizedCaseInsensitiveContains(searchText) ?? false
+        }
       }
     }
 
