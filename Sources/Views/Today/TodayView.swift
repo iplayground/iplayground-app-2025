@@ -158,6 +158,7 @@ struct TodayView: View {
           label: {
             HStack {
               sessionCell(session)
+              Spacer()
               Image(systemName: "chevron.right")
             }
           }
