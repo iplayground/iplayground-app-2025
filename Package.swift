@@ -10,7 +10,7 @@ let appName = "App"
 let sessionData = SourceControlDependency(
   package: .package(
     url: "https://github.com/iplayground/SessionData",
-    exact: "2025.0.2"
+    branch: "links"
   ),
   productName: "SessionData"
 )
@@ -87,6 +87,7 @@ let publicApp = SingleTargetLibrary(
 
 let package = Package(
   name: appName + "Package",  // To avoid target name collision when importing to Xcode project
+  defaultLocalization: "zh-Hant",
   platforms: [
     .iOS(.v17),
     .macOS(.v14),
