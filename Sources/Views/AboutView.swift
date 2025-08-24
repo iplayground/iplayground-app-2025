@@ -183,9 +183,7 @@ package struct AboutView: View {
             Text(link.title)
           }
           Spacer()
-          Image(systemName: "chevron.right")
-            .foregroundColor(.secondary)
-            .font(.caption)
+          Image(systemName: "arrow.up.right.square")
         }
       },
       primaryAction: {
