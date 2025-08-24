@@ -11,6 +11,7 @@ package struct AppView: View {
 
   package var body: some View {
     HomeView(store: store.scope(state: \.home, action: \.home))
+      .tint(Color(.accent))
       .task {
         await store.send(.task).finish()
       }

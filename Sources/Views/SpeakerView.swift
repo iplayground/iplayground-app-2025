@@ -40,18 +40,29 @@ struct SpeakerView: View {
     Group {
       if let photoURL = store.speaker.photo {
         let avatarSize: CGFloat = 80
-        // FIXME: Cache image
-        AsyncImage(url: photoURL) { image in
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(width: avatarSize, height: avatarSize)
-            .clipShape(Circle())
-        } placeholder: {
-          Circle()
-            .fill(Color.gray.opacity(0.2))
-            .frame(width: avatarSize, height: avatarSize)
+        CachedAsyncImage(url: photoURL) { phase in
+          switch phase {
+          case let .success(image):
+            image
+              .resizable()
+              .aspectRatio(contentMode: .fill)
+              .frame(width: avatarSize, height: avatarSize)
+              .clipShape(Circle())
+          case .failure, .empty:
+            Circle()
+              .fill(Color.gray.opacity(0.2))
+              .frame(width: avatarSize, height: avatarSize)
+          @unknown default:
+            Circle()
+              .fill(Color.gray.opacity(0.2))
+              .frame(width: avatarSize, height: avatarSize)
+          }
         }
+      } else {
+        let avatarSize: CGFloat = 80
+        Circle()
+          .fill(Color.gray.opacity(0.2))
+          .frame(width: avatarSize, height: avatarSize)
       }
     }
   }
@@ -122,7 +133,7 @@ struct SpeakerView: View {
   @ViewBuilder
   private var socialLinks: some View {
     if let website = store.speaker.url {
-      urlMenuButton(url: website, title: "網站")
+      urlMenuButton(url: website, title: String(localized: "網站", bundle: .module))
     }
     if let github = store.speaker.github {
       urlMenuButton(url: github, title: "GitHub")
@@ -131,7 +142,7 @@ struct SpeakerView: View {
       urlMenuButton(url: linkedin, title: "LinkedIn")
     }
     if let x = store.speaker.x {
-      urlMenuButton(url: x, title: "X (Twitter)")
+      urlMenuButton(url: x, title: "Twitter (X)")
     }
     if let threads = store.speaker.threads {
       urlMenuButton(url: threads, title: "Threads")

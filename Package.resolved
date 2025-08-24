@@ -1,5 +1,5 @@
 {
-  "originHash" : "9f36d0b9a52801d71ff7afb788fe045a7270baf0b964e55e3557d76ee3c0ab21",
+  "originHash" : "a5730e3fd4e09013cf6b7a2e4cefcf37e8c181000f5e7a7948cde967609ac51f",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -15,8 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/iplayground/SessionData",
       "state" : {
-        "revision" : "b23d36e2d4fc2cd54486796d04cab6d5a039ae8d",
-        "version" : "2025.0.2"
+        "revision" : "d1a7e62d71b16d9427ddb76b6223fb3b8842745d"
       }
     },
     {
@@ -51,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
-        "revision" : "6574de2396319a58e86e2178577268cb4aeccc30",
-        "version" : "1.20.2"
+        "revision" : "9dae1ff6f69ce8764341f5c341f1b3fe6a640e64",
+        "version" : "1.22.0"
       }
     },
     {

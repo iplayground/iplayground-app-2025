@@ -7,6 +7,7 @@ import SwiftUI
 @ViewAction(for: TodayFeature.self)
 struct TodayView: View {
   @Bindable var store: StoreOf<TodayFeature>
+  @State private var nowSectionID: Int = 0
 
   var body: some View {
     NavigationStack(
@@ -31,6 +32,7 @@ struct TodayView: View {
         }
         .listStyle(.inset)
         .contentMargins(.vertical, -4, for: .scrollIndicators)
+        .searchable(text: $store.searchText)
         .safeAreaInset(edge: .bottom) {
           VStack {
             Button(
@@ -49,6 +51,7 @@ struct TodayView: View {
               },
               label: {
                 nowSection
+                  .id(nowSectionID)
               }
             )
             .buttonStyle(.plain)
@@ -62,15 +65,19 @@ struct TodayView: View {
       send(.task)
     }
     .task {
-      // TODO: refresh date per minute
+      Task {
+        while Task.isCancelled == false {
+          try await Task.sleep(for: .seconds(15))
+          nowSectionID += 1
+        }
+      }
     }
-    .navigationTitle("議程與活動")
+    .navigationTitle(String(localized: "議程與活動", bundle: .module))
     .navigationBarTitleDisplayMode(.inline)
   }
 
   @ViewBuilder
   private var nowSection: some View {
-
     if let startDate = store.day1Sessions.first?.dateInterval?.start,
       let endDate = store.day2Sessions.last?.dateInterval?.end
     {
@@ -81,14 +88,15 @@ struct TodayView: View {
         HStack {
           let duration = Duration.seconds(startDate.timeIntervalSince(now))
           Text(
-            "iPlayground 倒數中：\(Text(duration.formatted(.units(allowed: [.days, .hours, .minutes],width: .narrow))))"
+            "iPlayground 倒數中：\(Text(duration.formatted(.units(allowed: [.days, .hours, .minutes],width: .narrow))))",
+            bundle: .module
           )
           Spacer()
         }
       } else if now > endDate {
         // 情況 2：活動已結束
         HStack {
-          Text("今年的活動已結束，感謝您的參與！")
+          Text("今年的活動已結束，感謝您的參與！", bundle: .module)
           Spacer()
         }
       } else if let currentSession = store.currentSession {
@@ -100,17 +108,21 @@ struct TodayView: View {
             Text(
               """
               進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
-              """)
+              """,
+              bundle: .module
+            )
 
             if let nextSession = store.nextSession {
               Text(
-                "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")"
+                "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
+                bundle: .module
               )
             }
 
             if let nextNextSession = store.nextNextSession {
               Text(
-                "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")"
+                "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
+                bundle: .module
               )
             }
           }
@@ -124,7 +136,7 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text(day.localizedStringKey)
+        Text(day.localizedStringKey, bundle: .module)
           .tag(day)
       }
     }
@@ -138,15 +150,24 @@ struct TodayView: View {
     let currentSessionID = store.currentSession?.id
 
     ForEach(store.currentSessions) { session in
-      Button(
-        action: {
-          send(.tapSession(session))
-        },
-        label: {
-          sessionCell(session)
-        }
-      )
-      .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      if session.speakerID != nil {
+        Button(
+          action: {
+            send(.tapSession(session))
+          },
+          label: {
+            HStack {
+              sessionCell(session)
+              Spacer()
+              Image(systemName: "chevron.right")
+            }
+          }
+        )
+        .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      } else {
+        sessionCell(session)
+          .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+      }
       // TODO: Change highlight color
     }
   }

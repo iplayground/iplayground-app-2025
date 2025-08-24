@@ -25,9 +25,9 @@ final class TodayFeatureStateTests: XCTestCase {
     let day1Session = createMockSessionWrapper(title: "Day 1 Session")
     let day2Session = createMockSessionWrapper(title: "Day 2 Session")
 
-    var state = TodayFeature.State()
-    state.day1Sessions = [day1Session]
-    state.day2Sessions = [day2Session]
+    let state = TodayFeature.State()
+    state.$day1Sessions.withLock { $0 = [day1Session] }
+    state.$day2Sessions.withLock { $0 = [day2Session] }
 
     expectNoDifference(state.allSessions, [day1Session, day2Session])
   }
@@ -37,8 +37,8 @@ final class TodayFeatureStateTests: XCTestCase {
     let day2Session = createMockSessionWrapper(title: "Day 2 Session")
 
     var state = TodayFeature.State()
-    state.day1Sessions = [day1Session]
-    state.day2Sessions = [day2Session]
+    state.$day1Sessions.withLock { $0 = [day1Session] }
+    state.$day2Sessions.withLock { $0 = [day2Session] }
 
     state.selectedDay = .day1
     expectNoDifference(state.currentSessions, [day1Session])
@@ -64,8 +64,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [sessionWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [sessionWrapper] }
 
       XCTAssertNotNil(state.currentSession)
       expectNoDifference(state.currentSession?.title, "Current Session")
@@ -89,8 +89,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(12 * 60 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [sessionWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [sessionWrapper] }
 
       expectNoDifference(state.currentSession, nil)
     }
@@ -123,8 +123,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [currentWrapper, nextWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [currentWrapper, nextWrapper] }
 
       XCTAssertNotNil(state.nextSession)
       expectNoDifference(state.nextSession?.title, "Next Session")
@@ -148,8 +148,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(12 * 60 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [sessionWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [sessionWrapper] }
 
       expectNoDifference(state.nextSession, nil)
     }
@@ -192,8 +192,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [currentWrapper, nextWrapper, nextNextWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [currentWrapper, nextWrapper, nextNextWrapper] }
 
       XCTAssertNotNil(state.nextNextSession)
       expectNoDifference(state.nextNextSession?.title, "Next Next Session")
@@ -217,8 +217,8 @@ final class TodayFeatureStateTests: XCTestCase {
     withDependencies {
       $0.date.now = sessionDate.addingTimeInterval(10 * 60 * 60 + 30 * 60)
     } operation: {
-      var state = TodayFeature.State()
-      state.day1Sessions = [sessionWrapper]
+      let state = TodayFeature.State()
+      state.$day1Sessions.withLock { $0 = [sessionWrapper] }
 
       expectNoDifference(state.nextNextSession, nil)
     }

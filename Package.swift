@@ -10,14 +10,14 @@ let appName = "App"
 let sessionData = SourceControlDependency(
   package: .package(
     url: "https://github.com/iplayground/SessionData",
-    exact: "2025.0.2"
+    revision: "d1a7e62d71b16d9427ddb76b6223fb3b8842745d"
   ),
   productName: "SessionData"
 )
 let tca = SourceControlDependency(
   package: .package(
     url: "https://github.com/pointfreeco/swift-composable-architecture",
-    exact: "1.20.2"
+    exact: "1.22.0"
   ),
   productName: "ComposableArchitecture"
 )
@@ -87,6 +87,7 @@ let publicApp = SingleTargetLibrary(
 
 let package = Package(
   name: appName + "Package",  // To avoid target name collision when importing to Xcode project
+  defaultLocalization: "zh-Hant",
   platforms: [
     .iOS(.v17),
     .macOS(.v14),

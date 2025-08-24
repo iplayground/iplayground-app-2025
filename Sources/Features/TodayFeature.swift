@@ -8,9 +8,12 @@ package struct TodayFeature {
   @ObservableState
   package struct State: Equatable {
     package var path = StackState<Path.State>()
-    package var day1Sessions: [SessionWrapper] = []
-    package var day2Sessions: [SessionWrapper] = []
+    @Shared(.day1Sessions) package var day1Sessions: [SessionWrapper] = []
+    @Shared(.day2Sessions) package var day2Sessions: [SessionWrapper] = []
     package var selectedDay: Day = .day1
+    package var searchText: String = ""
+
+    @SharedReader(.speakers) var speakers: IdentifiedArrayOf<Speaker> = []
     var initialLoaded = false
 
     package var allSessions: [SessionWrapper] {
@@ -18,9 +21,23 @@ package struct TodayFeature {
     }
 
     package var currentSessions: [SessionWrapper] {
-      switch selectedDay {
-      case .day1: return day1Sessions
-      case .day2: return day2Sessions
+      let sessions: [SessionWrapper] = {
+        switch selectedDay {
+        case .day1: day1Sessions
+        case .day2: day2Sessions
+        }
+      }()
+
+      if searchText.isEmpty {
+        return sessions
+      } else {
+        return sessions.filter {
+          $0.title.localizedCaseInsensitiveContains(searchText)
+            || $0.timeRange.localizedCaseInsensitiveContains(searchText)
+            || $0.speaker.localizedCaseInsensitiveContains(searchText)
+            || $0.tags?.localizedCaseInsensitiveContains(searchText) ?? false
+            || $0.description?.localizedCaseInsensitiveContains(searchText) ?? false
+        }
       }
     }
 
@@ -106,17 +123,39 @@ package struct TodayFeature {
           await withThrowingTaskGroup(of: Void.self) { group in
             group.addTask {
               @Dependency(\.iPlaygroundDataClient) var client
-              let sessions = try await client.fetchSchedules(1)
+              let cachedSessions = try await client.fetchSchedules(1, .cacheFirst)
+              async let sessions = try await client.fetchSchedules(1, .remote)
               let day1Date = createDate(year: 2025, month: 8, day: 30)
-              let day1Sessions = sessions.map { SessionWrapper(date: day1Date, session: $0) }
-              await send(.binding(.set(\.day1Sessions, day1Sessions)))
+
+              let cached = cachedSessions.map {
+                SessionWrapper(date: day1Date, session: $0)
+              }
+              await send(.binding(.set(\.day1Sessions, cached)))
+
+              let remoteSessions = try await sessions.map {
+                SessionWrapper(date: day1Date, session: $0)
+              }
+              if remoteSessions != cached {
+                await send(.binding(.set(\.day1Sessions, remoteSessions)))
+              }
             }
             group.addTask {
               @Dependency(\.iPlaygroundDataClient) var client
-              let sessions = try await client.fetchSchedules(2)
+              let cachedSessions = try await client.fetchSchedules(2, .cacheFirst)
+              async let sessions = try await client.fetchSchedules(2, .remote)
               let day2Date = createDate(year: 2025, month: 8, day: 31)
-              let day2Sessions = sessions.map { SessionWrapper(date: day2Date, session: $0) }
-              await send(.binding(.set(\.day2Sessions, day2Sessions)))
+
+              let cached = cachedSessions.map {
+                SessionWrapper(date: day2Date, session: $0)
+              }
+              await send(.binding(.set(\.day2Sessions, cached)))
+
+              let remoteSessions = try await sessions.map {
+                SessionWrapper(date: day2Date, session: $0)
+              }
+              if remoteSessions != cached {
+                await send(.binding(.set(\.day2Sessions, remoteSessions)))
+              }
             }
           }
         }
@@ -135,12 +174,16 @@ package struct TodayFeature {
         guard let speakerID = session.speakerID else {
           return .none
         }
-        return .run { send in
-          @Dependency(\.iPlaygroundDataClient) var client
-          guard let speaker = try await client.fetchSpeakers()[id: speakerID] else {
-            return
+        return .run { [speakers = state.speakers] send in
+          if let speaker = speakers[id: speakerID] {
+            await send(.navigateToSpeaker(speaker))
+          } else {
+            @Dependency(\.iPlaygroundDataClient) var client
+            guard let speaker = try await client.fetchSpeakers(.remote)[id: speakerID] else {
+              return
+            }
+            await send(.navigateToSpeaker(speaker))
           }
-          await send(.navigateToSpeaker(speaker))
         }
       }
 
