@@ -12,7 +12,6 @@
 
 /* Begin PBXFileReference section */
 		6C1872772E2F320200AC4610 /* iPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C393D2B2E5A9BA4001F169A /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -54,7 +53,6 @@
 			children = (
 				6C1872792E2F320200AC4610 /* iPlayground */,
 				6C1872782E2F320200AC4610 /* Products */,
-				6C393D2B2E5A9BA4001F169A /* Development.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};

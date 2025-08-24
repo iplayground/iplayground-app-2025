@@ -14,11 +14,22 @@ package struct LiveTranslationView: View {
     NavigationStack {
       LiveTranslationContentView(store: store)
         .navigationTitle(Text("即時翻譯", bundle: .module))
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-          ToolbarItem(placement: .navigationBarTrailing) {
+          ToolbarItem(placement: .topBarLeading) {
             Button(action: { send(.showLanguageSheet) }) {
               Image(systemName: "globe")
             }
+          }
+
+          ToolbarItem(placement: .topBarTrailing) {
+            Button(
+              action: {
+                // TODO: Open Flitto webpage
+              },
+              label: {
+                Image(systemName: "arrow.up.right.square")
+              })
           }
         }
     }

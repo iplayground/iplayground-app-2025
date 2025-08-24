@@ -75,6 +75,7 @@ package struct LiveTranslationContentView: View {
     }
     .sheet(isPresented: $store.isShowingLanguageSheet) {
       SelectLanguageSheet(store: store)
+        .presentationDetents([.medium, .large])
     }
   }
 }

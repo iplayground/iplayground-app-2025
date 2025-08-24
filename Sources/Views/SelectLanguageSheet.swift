@@ -18,7 +18,8 @@ package struct SelectLanguageSheet: View {
           Button(action: { send(.changeLanguage(lang.langCode)) }) {
             HStack {
               Text(lang.langTitle)
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+              Spacer()
 
               if lang.langCode == store.selectedLangCode {
                 Image(systemName: "checkmark")
@@ -29,11 +30,6 @@ package struct SelectLanguageSheet: View {
             .contentShape(.rect)
           }
           .buttonStyle(.plain)
-          .listRowBackground(
-            lang.langCode == store.selectedLangCode
-              ? Color.blue.opacity(0.1)
-              : Color.clear
-          )
         }
       }
       .listStyle(.plain)
