@@ -158,6 +158,16 @@ package struct AboutView: View {
         urlMenuButton(link: link)
       }
 
+      // Link to Settings
+      let settingsLink = Models.Link(
+        id: "licensePlist",
+        title: "Acknowledgements",
+        url: URL(string: UIApplication.openSettingsURLString)!,
+        icon: "list.dash",
+        type: .appInfo
+      )
+      urlMenuButton(link: settingsLink)
+
       if !store.appVersion.isEmpty {
         HStack {
           Label(String(localized: "版本資訊", bundle: .module), systemImage: "info.circle")
