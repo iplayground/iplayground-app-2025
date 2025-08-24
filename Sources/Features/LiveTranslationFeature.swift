@@ -62,6 +62,7 @@ package struct LiveTranslationFeature {
       case changeLanguage(String)
       case showLanguageSheet
       case hideLanguageSheet
+      case tapWebpageButton
     }
   }
 
@@ -326,6 +327,16 @@ package struct LiveTranslationFeature {
       case .hideLanguageSheet:
         state.isShowingLanguageSheet = false
         return .none
+
+      case .tapWebpageButton:
+        return .run { send in
+          guard
+            let url = URL(
+              string: "https://livetr.flit.to/chat/\(Configuration.liveTranslationRoomNumber)")
+          else { return }
+          @Dependency(\.openURL) var openURL
+          await openURL(url)
+        }
       }
     }
   }

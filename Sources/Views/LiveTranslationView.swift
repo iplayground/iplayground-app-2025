@@ -24,9 +24,7 @@ package struct LiveTranslationView: View {
 
           ToolbarItem(placement: .topBarTrailing) {
             Button(
-              action: {
-                // TODO: Open Flitto webpage
-              },
+              action: { send(.tapWebpageButton) },
               label: {
                 Image(systemName: "arrow.up.right.square")
               })
