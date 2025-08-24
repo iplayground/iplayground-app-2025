@@ -1,6 +1,8 @@
 import OSLog
 import SwiftUI
 
+private let logger = Logger(subsystem: "Views", category: "CachedAsyncImage")
+
 private enum ImageLoadingState: Equatable {
   case idle
   case loading
@@ -12,8 +14,6 @@ package struct CachedAsyncImage<Content>: View where Content: View {
   private let url: URL?
   private let content: (AsyncImagePhase) -> Content
   @State private var loadingState: ImageLoadingState = .idle
-
-  private let logger = Logger(subsystem: "iPlayground", category: "CachedAsyncImage")
 
   package init(
     url: URL?,

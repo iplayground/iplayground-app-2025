@@ -10,7 +10,7 @@ let appName = "App"
 let sessionData = SourceControlDependency(
   package: .package(
     url: "https://github.com/iplayground/SessionData",
-    revision: "d1a7e62d71b16d9427ddb76b6223fb3b8842745d"
+    exact: "2025.1.0"
   ),
   productName: "SessionData"
 )
@@ -32,6 +32,13 @@ let dependencies = SourceControlDependency(
 let dependenciesMacros = SourceControlDependency(
   package: swiftDependencies,
   productName: "DependenciesMacros"
+)
+let flitto = SourceControlDependency(
+  package: .package(
+    url: "https://github.com/flitto/rtt_sdk",
+    revision: "f1da670032cb52081285752b7a8c479118038393"
+  ),
+  productName: "rtt-sdk"
 )
 
 // MARK: - Modules. Ordered by dependency hierarchy.
@@ -72,6 +79,7 @@ let dependencyClientsLive = SingleTargetLibrary(
     dependencies.targetDependency,
     dependenciesMacros.targetDependency,
     dependencyClients.targetDependency,
+    flitto.targetDependency,
   ]
 )
 let publicApp = SingleTargetLibrary(
@@ -104,6 +112,7 @@ let package = Package(
     tca.package,
     swiftDependencies,
     sessionData.package,
+    flitto.package,
   ],
   targets: [
     models.target,
@@ -112,8 +121,8 @@ let package = Package(
     dependencyClientsLive.target,
     features.target,
     features.testTarget,
-    publicApp.target,
     views.target,
+    publicApp.target,
   ]
 )
 
@@ -162,6 +171,10 @@ struct SingleTargetLibrary {
 
   var target: Target {
     .target(name: name, dependencies: dependencies)
+  }
+
+  var swift5Target: Target {
+    .target(name: name, dependencies: dependencies, swiftSettings: [.swiftLanguageMode(.v5)])
   }
 
   var targetDependency: Target.Dependency {
