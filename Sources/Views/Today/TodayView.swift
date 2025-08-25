@@ -108,28 +108,31 @@ struct TodayView: View {
           VStack(alignment: .leading) {
             let duration = Duration.seconds(
               currentSession.dateInterval?.end.timeIntervalSince(now) ?? 0)
-            Text(verbatim: "・") + Text(
-              """
-              進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
-              """,
-              bundle: .module
-            )
-            .foregroundStyle(Color(.iPlaygroundYellow))
-
-            if let nextSession = store.nextSession {
-              Text(verbatim: "・") + Text(
-                "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
+            Text(verbatim: "・")
+              + Text(
+                """
+                進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
+                """,
                 bundle: .module
               )
-              .foregroundStyle(Color(.iPlaygroundPink))
+              .foregroundStyle(Color(.iPlaygroundYellow))
+
+            if let nextSession = store.nextSession {
+              Text(verbatim: "・")
+                + Text(
+                  "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
+                  bundle: .module
+                )
+                .foregroundStyle(Color(.iPlaygroundPink))
             }
 
             if let nextNextSession = store.nextNextSession {
-              Text(verbatim: "・") + Text(
-                "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
-                bundle: .module
-              )
-              .foregroundStyle(Color(.iPlaygroundBlue))
+              Text(verbatim: "・")
+                + Text(
+                  "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
+                  bundle: .module
+                )
+                .foregroundStyle(Color(.iPlaygroundBlue))
             }
           }
           Spacer()
@@ -142,7 +145,9 @@ struct TodayView: View {
   private var dayPicker: some View {
     Picker("", selection: $store.selectedDay) {
       ForEach(TodayFeature.State.Day.allCases) { day in
-        Text(day.localizedStringKey, bundle: .module)
+        (Text(day.localizedStringKey, bundle: .module)
+          + Text(verbatim: " - ")
+         + Text(day.startOfDay, format: Date.FormatStyle().month(.abbreviated).day()))
           .tag(day)
       }
     }
@@ -170,10 +175,12 @@ struct TodayView: View {
             }
           }
         )
-        .listRowBackground(Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
+        .listRowBackground(
+          Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
       } else {
         sessionCell(session)
-          .listRowBackground(Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
+          .listRowBackground(
+            Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
       }
     }
   }
@@ -215,6 +222,17 @@ extension TodayFeature.State.Day {
     switch self {
     case .day1: return "第 1 天"
     case .day2: return "第 2 天"
+    }
+  }
+
+  var startOfDay: Date {
+    switch self {
+    case .day1:
+      return Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 30))!
+    case .day2:
+      return Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 31))!
     }
   }
 }
