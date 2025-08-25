@@ -32,6 +32,7 @@ package struct AboutView: View {
   package var body: some View {
     NavigationStack {
       List {
+        appIconSection
         mapSection
         importantLinksSection
         socialMediaSection
@@ -45,6 +46,28 @@ package struct AboutView: View {
       .task {
         await requestLookAround()
       }
+    }
+  }
+
+  @ViewBuilder
+  private var appIconSection: some View {
+    Section {} header: {
+      HStack {
+        Spacer()
+        VStack(alignment: .center) {
+          Image(.iPlayground)
+            .resizable()
+            .frame(width: 80, height: 80)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+          Text(verbatim: "iPlayground 2025")
+            .font(.title)
+            .monospaced()
+        }
+        Spacer()
+      }
+      .textCase(.none)
+      .padding(.top)
+      .padding(.bottom, -13)
     }
   }
 
