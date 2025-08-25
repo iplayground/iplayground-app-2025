@@ -1,5 +1,5 @@
 {
-  "originHash" : "44aed13ef26f1ac5d4f88eec1f5451cef67c7f993ecb9ef84c1bd96bd1b60ccb",
+  "originHash" : "02f851b7f7e40503f841ab01cf86a780115a0b0813f6c019424c6782ec2e1ef1",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -15,7 +15,6 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/flitto/rtt_sdk",
       "state" : {
-        "branch" : "main",
         "revision" : "f1da670032cb52081285752b7a8c479118038393"
       }
     },
