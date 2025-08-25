@@ -46,11 +46,11 @@ package struct HomeFeature {
     Scope(state: \.liveTranslation, action: \.liveTranslation) {
       LiveTranslationFeature()
     }
-    Scope(state: \.about, action: \.about) {
-      AboutFeature()
-    }
     Scope(state: \.my, action: \.my) {
       MyFeature()
+    }
+    Scope(state: \.about, action: \.about) {
+      AboutFeature()
     }
     BindingReducer()
     Reduce(core)
