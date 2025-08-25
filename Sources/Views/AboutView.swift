@@ -159,14 +159,16 @@ package struct AboutView: View {
       }
 
       // Link to Settings
-      let settingsLink = Models.Link(
-        id: "licensePlist",
-        title: "Acknowledgements",
-        url: URL(string: UIApplication.openSettingsURLString)!,
-        icon: "list.dash",
-        type: .appInfo
-      )
-      urlMenuButton(link: settingsLink)
+      if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+        let settingsLink = Models.Link(
+          id: "licensePlist",
+          title: "Acknowledgements",
+          url: settingsURL,
+          icon: "list.dash",
+          type: .appInfo
+        )
+        urlMenuButton(link: settingsLink)
+      }
 
       if !store.appVersion.isEmpty {
         HStack {
