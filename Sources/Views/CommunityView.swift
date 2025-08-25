@@ -203,9 +203,16 @@ struct CommunityView: View {
       Spacer()
       switch navigationIndicator {
       case let .link(url):
-        Link(destination: url, label: { Image(systemName: "arrow.up.right.square") })
+        Link(
+          destination: url,
+          label: {
+            Image(systemName: "arrow.up.right.square")
+              .foregroundStyle(Color(.accent))
+          }
+        )
       case .chevron:
         Image(systemName: "chevron.right")
+          .foregroundStyle(Color(.accent))
       case .empty:
         EmptyView()
       }

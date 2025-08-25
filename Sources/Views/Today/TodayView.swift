@@ -57,10 +57,15 @@ struct TodayView: View {
             .buttonStyle(.plain)
             .padding()
             .background(Material.regular)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(.horizontal)
+            .padding(.bottom)
           }
         }
       }
     }
+    .navigationTitle(String(localized: "議程與活動", bundle: .module))
+    .navigationBarTitleDisplayMode(.inline)
     .task {
       send(.task)
     }
@@ -72,8 +77,6 @@ struct TodayView: View {
         }
       }
     }
-    .navigationTitle(String(localized: "議程與活動", bundle: .module))
-    .navigationBarTitleDisplayMode(.inline)
   }
 
   @ViewBuilder
@@ -105,25 +108,28 @@ struct TodayView: View {
           VStack(alignment: .leading) {
             let duration = Duration.seconds(
               currentSession.dateInterval?.end.timeIntervalSince(now) ?? 0)
-            Text(
+            Text(verbatim: "・") + Text(
               """
               進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
               """,
               bundle: .module
             )
+            .foregroundStyle(Color(.iPlaygroundYellow))
 
             if let nextSession = store.nextSession {
-              Text(
+              Text(verbatim: "・") + Text(
                 "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
                 bundle: .module
               )
+              .foregroundStyle(Color(.iPlaygroundPink))
             }
 
             if let nextNextSession = store.nextNextSession {
-              Text(
+              Text(verbatim: "・") + Text(
                 "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
                 bundle: .module
               )
+              .foregroundStyle(Color(.iPlaygroundBlue))
             }
           }
           Spacer()
@@ -160,15 +166,15 @@ struct TodayView: View {
               sessionCell(session)
               Spacer()
               Image(systemName: "chevron.right")
+                .foregroundStyle(Color(.accent))
             }
           }
         )
-        .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+        .listRowBackground(Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
       } else {
         sessionCell(session)
-          .listRowBackground(Color.gray.opacity(session.id == currentSessionID ? 0.3 : 0))
+          .listRowBackground(Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
       }
-      // TODO: Change highlight color
     }
   }
 

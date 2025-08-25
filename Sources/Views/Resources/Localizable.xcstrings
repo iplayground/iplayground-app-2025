@@ -532,19 +532,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In Progress: %1$@%2$@ (Remaining: %3$@)"
+            "value" : "Now: %1$@%2$@ (Remaining: %3$@)"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "進行中: %1$@%2$@（残り: %3$@）"
+            "value" : "現在: %1$@%2$@（残り: %3$@）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "進行中：%1$@%2$@（剩餘：%3$@）"
+            "state" : "translated",
+            "value" : "正在：%1$@%2$@（剩餘：%3$@）"
           }
         }
       }
