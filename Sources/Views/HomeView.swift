@@ -24,11 +24,13 @@ struct HomeView: View {
       .tabItem { Label(String(localized: "社群", bundle: .module), systemImage: "person.3") }
 
       // Tab 3: Flitto (Live Translation)
-      Text(verbatim: "Flitto")
-        .tabItem { Label(String(localized: "即時翻譯", bundle: .module), systemImage: "globe") }
+      LiveTranslationView(
+        store: store.scope(state: \.liveTranslation, action: \.liveTranslation)
+      )
+      .tabItem { Label(String(localized: "即時翻譯", bundle: .module), systemImage: "globe") }
 
       // Tab 4: My
-      Text("我的", bundle: .module)
+      MyView(store: store.scope(state: \.my, action: \.my))
         .tabItem { Label(String(localized: "我的", bundle: .module), systemImage: "bookmark") }
 
       // Tab 5: About

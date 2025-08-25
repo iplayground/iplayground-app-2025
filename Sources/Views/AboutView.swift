@@ -32,6 +32,7 @@ package struct AboutView: View {
   package var body: some View {
     NavigationStack {
       List {
+        appIconSection
         mapSection
         importantLinksSection
         socialMediaSection
@@ -45,6 +46,29 @@ package struct AboutView: View {
       .task {
         await requestLookAround()
       }
+    }
+  }
+
+  @ViewBuilder
+  private var appIconSection: some View {
+    Section {
+    } header: {
+      HStack {
+        Spacer()
+        VStack(alignment: .center) {
+          Image(.iPlayground)
+            .resizable()
+            .frame(width: 80, height: 80)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+          Text(verbatim: "iPlayground 2025")
+            .font(.title)
+            .monospaced()
+        }
+        Spacer()
+      }
+      .textCase(.none)
+      .padding(.top)
+      .padding(.bottom, -13)
     }
   }
 
@@ -158,6 +182,18 @@ package struct AboutView: View {
         urlMenuButton(link: link)
       }
 
+      // Link to Settings
+      if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+        let settingsLink = Models.Link(
+          id: "licensePlist",
+          title: "Acknowledgements",
+          url: settingsURL,
+          icon: "list.bullet.rectangle",
+          type: .appInfo
+        )
+        urlMenuButton(link: settingsLink)
+      }
+
       if !store.appVersion.isEmpty {
         HStack {
           Label(String(localized: "版本資訊", bundle: .module), systemImage: "info.circle")
@@ -183,9 +219,7 @@ package struct AboutView: View {
             Text(link.title)
           }
           Spacer()
-          Image(systemName: "chevron.right")
-            .foregroundColor(.secondary)
-            .font(.caption)
+          Image(systemName: "arrow.up.right.square")
         }
       },
       primaryAction: {

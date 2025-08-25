@@ -16,7 +16,7 @@ final class AboutFeatureTests: XCTestCase {
     }
 
     await store.send(\.view.task)
-    await store.skipReceivedActions() // Let's skip the exact expectation for concurrent actions
+    await store.skipReceivedActions()  // Let's skip the exact expectation for concurrent actions
 
     XCTAssert(!store.state.appVersion.isEmpty)
   }

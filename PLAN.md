@@ -106,7 +106,9 @@ iPlayground App 2025
    - [x] Speaker List -> SpeakerView
    - [x] Staff List
  - 🌐 Tab 3: Flitto（即時翻譯）
-   - 翻譯頁面
+   - [x] 翻譯頁面
+   - [ ] 記住語言選項
+   - [ ] Fallback 到網頁版 https://livetr.flit.to/chat/{roomNumber}
  - 👤 Tab 4: 個人功能
    - 編輯個人資料頁面
    - 產生 QR Code 頁面（個人名片，有「我在參加 iPlayground 2025」字樣，適合截圖上傳，也適合合照時使用）

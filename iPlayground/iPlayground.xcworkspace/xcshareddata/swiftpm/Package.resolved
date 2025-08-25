@@ -1,5 +1,5 @@
 {
-  "originHash" : "a5730e3fd4e09013cf6b7a2e4cefcf37e8c181000f5e7a7948cde967609ac51f",
+  "originHash" : "7000bfdd142c92db698957e84c2e17c94432db50e44fa5ae8dc84b1bc81f5f6b",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -11,11 +11,20 @@
       }
     },
     {
+      "identity" : "rtt_sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/flitto/rtt_sdk",
+      "state" : {
+        "revision" : "f1da670032cb52081285752b7a8c479118038393"
+      }
+    },
+    {
       "identity" : "sessiondata",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/iplayground/SessionData",
       "state" : {
-        "revision" : "d1a7e62d71b16d9427ddb76b6223fb3b8842745d"
+        "revision" : "21edf250d668ffe45fae924dee96dc7556053607",
+        "version" : "2025.1.1"
       }
     },
     {

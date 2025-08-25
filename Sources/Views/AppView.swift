@@ -17,3 +17,7 @@ package struct AppView: View {
       }
   }
 }
+
+#Preview {
+  AppView(store: .init(initialState: .init(), reducer: { AppFeature() }))
+}
