@@ -30,7 +30,7 @@ struct HomeView: View {
       .tabItem { Label(String(localized: "即時翻譯", bundle: .module), systemImage: "globe") }
 
       // Tab 4: My
-      Text("我的", bundle: .module)
+      MyView(store: store.scope(state: \.my, action: \.my))
         .tabItem { Label(String(localized: "我的", bundle: .module), systemImage: "bookmark") }
 
       // Tab 5: About

@@ -16,8 +16,8 @@ package struct AboutFeature {
 
   @CasePathable
   package enum Action: Equatable, BindableAction, ComposableArchitecture.ViewAction {
-    case view(ViewAction)
     case binding(BindingAction<State>)
+    case view(ViewAction)
     case versionInfoLoaded(appVersion: String, buildNumber: String)
 
     @CasePathable

@@ -164,7 +164,7 @@ package struct AboutView: View {
           id: "licensePlist",
           title: "Acknowledgements",
           url: settingsURL,
-          icon: "list.dash",
+          icon: "list.bullet.rectangle",
           type: .appInfo
         )
         urlMenuButton(link: settingsLink)
