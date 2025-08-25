@@ -51,7 +51,8 @@ package struct AboutView: View {
 
   @ViewBuilder
   private var appIconSection: some View {
-    Section {} header: {
+    Section {
+    } header: {
       HStack {
         Spacer()
         VStack(alignment: .center) {

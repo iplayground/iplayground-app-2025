@@ -147,7 +147,7 @@ struct TodayView: View {
       ForEach(TodayFeature.State.Day.allCases) { day in
         (Text(day.localizedStringKey, bundle: .module)
           + Text(verbatim: " - ")
-         + Text(day.startOfDay, format: Date.FormatStyle().month(.abbreviated).day()))
+          + Text(day.startOfDay, format: Date.FormatStyle().month(.abbreviated).day()))
           .tag(day)
       }
     }
