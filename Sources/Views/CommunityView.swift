@@ -37,6 +37,7 @@ struct CommunityView: View {
       switch store.selectedTab {
       case .sponsor:
         sponsorsView
+          .environment(\.colorScheme, .light)
       case .speaker:
         speakersView
       case .staff:
