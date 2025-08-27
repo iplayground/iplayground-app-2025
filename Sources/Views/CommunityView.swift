@@ -28,7 +28,7 @@ struct CommunityView: View {
 
   @ViewBuilder
   private var rootView: some View {
-    VStack {
+    VStack(spacing: .zero) {
       tabs
 
       switch store.selectedTab {
@@ -57,7 +57,7 @@ struct CommunityView: View {
     }
     .pickerStyle(.segmented)
     .padding(.horizontal)
-    .padding(.bottom, 8)
+    .padding(.vertical, 8)
   }
 
   @ViewBuilder
@@ -236,7 +236,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
-    .contentMargins(.vertical, -4, for: .scrollIndicators)
+    .contentMargins(.bottom, -4, for: .scrollIndicators)
   }
 
   @ViewBuilder
@@ -252,7 +252,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
-    .contentMargins(.vertical, -4, for: .scrollIndicators)
+    .contentMargins(.bottom, -4, for: .scrollIndicators)
   }
 }
 
