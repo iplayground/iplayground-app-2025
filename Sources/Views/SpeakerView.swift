@@ -31,6 +31,17 @@ struct SpeakerView: View {
     .contentMargins(.top, .zero)
     .navigationTitle("講者")
     .navigationBarTitleDisplayMode(.inline)
+    .toolbar {
+      if store.hackMDURL != nil {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button(action: {
+            send(.tapHackMDButton)
+          }) {
+            Label("HackMD", systemImage: "note.text")
+          }
+        }
+      }
+    }
   }
 
   // MARK: - Child Views
@@ -178,7 +189,7 @@ struct SpeakerView: View {
             threads: URL(string: "https://www.threads.net")!,
             x: URL(string: "https://www.x.com")!,
             ig: URL(string: "https://www.instagram.com")!
-          )
+          ), hackMDURL: URL(string: "https://hackmd.io/@iPlayground/S1rVR6Zugl")
         ),
         reducer: { SpeakerFeature() }
       )

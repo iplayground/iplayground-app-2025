@@ -67,7 +67,7 @@ package struct CommunityFeature {
         return .none
 
       case .tapSpeaker(let speaker):
-        state.path.append(.speaker(.init(speaker: speaker)))
+        state.path.append(.speaker(.init(speaker: speaker, hackMDURL: nil)))
         return .none
       }
     }

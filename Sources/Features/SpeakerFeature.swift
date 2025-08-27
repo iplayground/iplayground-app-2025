@@ -14,9 +14,11 @@ package struct SpeakerFeature {
   @ObservableState
   package struct State: Equatable {
     package var speaker: Speaker
+    package var hackMDURL: URL?
 
-    package init(speaker: Speaker) {
+    package init(speaker: Speaker, hackMDURL: URL?) {
       self.speaker = speaker
+      self.hackMDURL = hackMDURL
     }
   }
 
@@ -30,6 +32,7 @@ package struct SpeakerFeature {
       case task
       case tapURL(URL)
       case tapCopyURL(URL)
+      case tapHackMDButton
     }
   }
 
@@ -58,6 +61,14 @@ package struct SpeakerFeature {
         return .run { _ in
           @Dependency(\.pasteboardClient) var pasteboardClient
           pasteboardClient.copy(url.absoluteString)
+        }
+      case .tapHackMDButton:
+        guard let hackMDURL = state.hackMDURL else {
+          return .none
+        }
+        return .run { _ in
+          @Dependency(\.openURL) var openURL
+          await openURL(hackMDURL)
         }
       }
     }
