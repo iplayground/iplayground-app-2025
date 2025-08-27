@@ -45,9 +45,9 @@ struct MyView: View {
       label: {
         HStack {
           if let iconName = link.icon {
-            Label(link.title, systemImage: iconName)
+            Label(link.localizedTitle, systemImage: iconName)
           } else {
-            Text(link.title)
+            Text(link.localizedTitle)
           }
           Spacer()
           Image(systemName: "arrow.up.right.square")

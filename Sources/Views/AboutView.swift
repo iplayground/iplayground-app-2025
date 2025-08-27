@@ -186,7 +186,7 @@ package struct AboutView: View {
       if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
         let settingsLink = Models.Link(
           id: "licensePlist",
-          title: "Acknowledgements",
+          title: String(localized: "Open Source Licenses", bundle: .module),
           url: settingsURL,
           icon: "list.bullet.rectangle",
           type: .appInfo
@@ -214,9 +214,9 @@ package struct AboutView: View {
       label: {
         HStack {
           if let iconName = link.icon {
-            Label(link.title, systemImage: iconName)
+            Label(link.localizedTitle, systemImage: iconName)
           } else {
-            Text(link.title)
+            Text(link.localizedTitle)
           }
           Spacer()
           Image(systemName: "arrow.up.right.square")
@@ -255,6 +255,51 @@ package struct AboutView: View {
   private var appInfoLinks: [Models.Link] {
     store.links.filter { link in
       link.type == .appInfo
+    }
+  }
+}
+
+// Link title localized by ID
+
+extension Models.Link {
+  var localizedTitle: String {
+    switch id {
+    case "website":
+      return String(localized: "Website", bundle: .module)
+    case "coc":
+      return String(localized: "Code of Conduct", bundle: .module)
+    case "hackmd":
+      return String(localized: "HackMD", bundle: .module)
+    case "newsletter":
+      return String(localized: "Newsletter", bundle: .module)
+    case "youtube":
+      return "YouTube"
+    case "discord":
+      return "Discord"
+    case "twitter":
+      return "Twitter (X)"
+    case "threads":
+      return "Threads"
+    case "mastodon":
+      return "Mastodon"
+    case "facebook":
+      return "Facebook"
+    case "app-source":
+      return "iplayground-app-2025"
+    case "session-data-source":
+      return "SessionData"
+    case "app-store":
+      return "App Store"
+    case "privacy-policy":
+      return String(localized: "Privacy Policy", bundle: .module)
+    case "kktix":
+      return String(localized: "KKTIX", bundle: .module)
+    case "notice":
+      return String(localized: "Notice", bundle: .module)
+    case "lightning-talk":
+      return String(localized: "Lightning Talk", bundle: .module)
+    default:
+      return title
     }
   }
 }
