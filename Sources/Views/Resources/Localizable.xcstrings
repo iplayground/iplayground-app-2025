@@ -25,13 +25,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Countdown: %@"
+            "value" : "iPlayground 2025 Countdown: %@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カウントダウン: %@"
+            "value" : "iPlayground 2025 カウントダウン: %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPlayground 2025 倒數中：%@"
           }
         }
       }
