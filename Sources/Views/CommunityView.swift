@@ -28,12 +28,16 @@ struct CommunityView: View {
 
   @ViewBuilder
   private var rootView: some View {
-    VStack {
+    VStack(spacing: .zero) {
       tabs
+        .background {
+          store.selectedTab.backgroundColor
+        }
 
       switch store.selectedTab {
       case .sponsor:
         sponsorsView
+          .environment(\.colorScheme, .light)
       case .speaker:
         speakersView
       case .staff:
@@ -42,6 +46,8 @@ struct CommunityView: View {
     }
     .navigationTitle(String(localized: "社群", bundle: .module))
     .navigationBarTitleDisplayMode(.inline)
+    .toolbarBackground(.visible, for: .navigationBar)
+    .toolbarBackground(store.selectedTab.backgroundColor, for: .navigationBar)
     .task {
       send(.task)
     }
@@ -57,7 +63,7 @@ struct CommunityView: View {
     }
     .pickerStyle(.segmented)
     .padding(.horizontal)
-    .padding(.bottom, 8)
+    .padding(.vertical, 8)
   }
 
   @ViewBuilder
@@ -236,7 +242,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
-    .contentMargins(.vertical, -4, for: .scrollIndicators)
+    .contentMargins(.bottom, -4, for: .scrollIndicators)
   }
 
   @ViewBuilder
@@ -252,7 +258,7 @@ struct CommunityView: View {
       }
     }
     .listStyle(.plain)
-    .contentMargins(.vertical, -4, for: .scrollIndicators)
+    .contentMargins(.bottom, -4, for: .scrollIndicators)
   }
 }
 
@@ -265,6 +271,17 @@ extension CommunityFeature.Tab {
       return "贊助商"
     case .staff:
       return "工作人員"
+    }
+  }
+
+  var backgroundColor: Color {
+    switch self {
+    case .speaker:
+      return Color(.iPlaygroundBlueBackground)
+    case .sponsor:
+      return Color(.iPlaygroundYellowBackground)
+    case .staff:
+      return Color(.iPlaygroundPinkBackground)
     }
   }
 }

@@ -10,6 +10,7 @@ package struct SessionWrapper: Identifiable, Equatable {
   package let speakerID: Speaker.ID?
   package let tags: String?
   package let description: String?
+  package let hackMDURL: URL?
 
   package init(
     date: Date,
@@ -18,7 +19,8 @@ package struct SessionWrapper: Identifiable, Equatable {
     speaker: String,
     speakerID: Speaker.ID?,
     tags: String?,
-    description: String?
+    description: String?,
+    hackMDURL: URL?
   ) {
     self.timeRange = timeRange
     self.dateInterval = Self.parseDateInterval(from: timeRange, baseDate: date)
@@ -27,6 +29,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.speakerID = speakerID
     self.tags = tags
     self.description = description
+    self.hackMDURL = hackMDURL
   }
 
   package init(date: Date, session: Session) {
@@ -37,6 +40,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.speakerID = session.speakerID
     self.tags = session.tags.isEmpty ? nil : session.tags.joined(separator: " · ")
     self.description = session.description.isEmpty ? nil : session.description
+    self.hackMDURL = session.hackMD
   }
 
   package init(session: Session) {
@@ -47,6 +51,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.speakerID = session.speakerID
     self.tags = session.tags.isEmpty ? nil : session.tags.joined(separator: " · ")
     self.description = session.description.isEmpty ? nil : session.description
+    self.hackMDURL = session.hackMD
   }
 
   package init(
@@ -55,7 +60,8 @@ package struct SessionWrapper: Identifiable, Equatable {
     speaker: String,
     speakerID: Speaker.ID?,
     tags: String?,
-    description: String?
+    description: String?,
+    hackMDURL: URL?
   ) {
     self.timeRange = timeRange
     self.dateInterval = nil
@@ -64,6 +70,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.speakerID = speakerID
     self.tags = tags
     self.description = description
+    self.hackMDURL = hackMDURL
   }
 
   private static func parseDateInterval(from timeRange: String, baseDate: Date) -> DateInterval? {

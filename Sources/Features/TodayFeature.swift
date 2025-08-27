@@ -75,7 +75,7 @@ package struct TodayFeature {
     case binding(BindingAction<State>)
     case path(StackActionOf<Path>)
     case view(ViewAction)
-    case navigateToSpeaker(Speaker)
+    case navigateToSpeaker(Speaker, hackMDURL: URL?)
 
     @CasePathable
     package enum ViewAction: Equatable {
@@ -176,19 +176,20 @@ package struct TodayFeature {
         }
         return .run { [speakers = state.speakers] send in
           if let speaker = speakers[id: speakerID] {
-            await send(.navigateToSpeaker(speaker))
+            await send(.navigateToSpeaker(speaker, hackMDURL: session.hackMDURL))
           } else {
             @Dependency(\.iPlaygroundDataClient) var client
             guard let speaker = try await client.fetchSpeakers(.remote)[id: speakerID] else {
               return
             }
-            await send(.navigateToSpeaker(speaker))
+            await send(.navigateToSpeaker(speaker, hackMDURL: session.hackMDURL))
           }
         }
       }
 
-    case let .navigateToSpeaker(speaker):
-      state.path.append(.speaker(.init(speaker: speaker)))
+    case let .navigateToSpeaker(speaker, hackMDURL: hackMDURL):
+      state.path.append(
+        .speaker(.init(speaker: speaker, hackMDURL: hackMDURL)))
       return .none
     }
   }

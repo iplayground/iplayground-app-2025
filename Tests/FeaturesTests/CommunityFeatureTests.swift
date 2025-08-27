@@ -18,14 +18,14 @@ final class CommunityFeatureTests: XCTestCase {
     }
 
     await store.send(\.view.tapSpeaker, speaker) {
-      $0.path.append(.speaker(SpeakerFeature.State(speaker: speaker)))
+      $0.path.append(.speaker(SpeakerFeature.State(speaker: speaker, hackMDURL: nil)))
     }
   }
 
   func testPathNavigation() async {
     let speaker = createMockSpeaker()
     var initialState = CommunityFeature.State()
-    initialState.path.append(.speaker(SpeakerFeature.State(speaker: speaker)))
+    initialState.path.append(.speaker(SpeakerFeature.State(speaker: speaker, hackMDURL: nil)))
 
     let store = TestStore(initialState: initialState) {
       CommunityFeature()
