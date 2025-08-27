@@ -12,18 +12,34 @@ final class SpeakerFeatureTests: XCTestCase {
 
   func testInitialState() async {
     let speaker = createMockSpeaker()
-    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: nil)) {
       SpeakerFeature()
     }
 
     store.assert {
       $0.speaker = speaker
+      $0.hackMDURL = nil
+    }
+  }
+
+  func testInitialStateWithHackMDURL() async {
+    let speaker = createMockSpeaker()
+    let hackMDURL = URL(string: "https://hackmd.io/test")!
+    let store = TestStore(
+      initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: hackMDURL)
+    ) {
+      SpeakerFeature()
+    }
+
+    store.assert {
+      $0.speaker = speaker
+      $0.hackMDURL = hackMDURL
     }
   }
 
   func testTaskAction() async {
     let speaker = createMockSpeaker()
-    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: nil)) {
       SpeakerFeature()
     }
 
@@ -34,7 +50,7 @@ final class SpeakerFeatureTests: XCTestCase {
     let speaker = createMockSpeaker()
     let testURL = URL(string: "https://example.com")!
 
-    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: nil)) {
       SpeakerFeature()
     } withDependencies: {
       $0.openURL = OpenURLEffect { url in
@@ -50,7 +66,7 @@ final class SpeakerFeatureTests: XCTestCase {
     let speaker = createMockSpeaker()
     let testURL = URL(string: "https://example.com")!
 
-    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker)) {
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: nil)) {
       SpeakerFeature()
     } withDependencies: {
       $0.pasteboardClient.copy = { string in
@@ -59,6 +75,34 @@ final class SpeakerFeatureTests: XCTestCase {
     }
 
     await store.send(\.view.tapCopyURL, testURL)
+  }
+
+  func testTapHackMDButtonWithURL() async {
+    let speaker = createMockSpeaker()
+    let hackMDURL = URL(string: "https://hackmd.io/@iPlayground/test")!
+
+    let store = TestStore(
+      initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: hackMDURL)
+    ) {
+      SpeakerFeature()
+    } withDependencies: {
+      $0.openURL = OpenURLEffect { url in
+        XCTAssertEqual(url, hackMDURL)
+        return true
+      }
+    }
+
+    await store.send(\.view.tapHackMDButton)
+  }
+
+  func testTapHackMDButtonWithoutURL() async {
+    let speaker = createMockSpeaker()
+
+    let store = TestStore(initialState: SpeakerFeature.State(speaker: speaker, hackMDURL: nil)) {
+      SpeakerFeature()
+    }
+
+    await store.send(\.view.tapHackMDButton)
   }
 
   // MARK: - Helper Methods

@@ -16,7 +16,8 @@ struct SessionWrapperTests {
       speaker: "Test Speaker",
       speakerID: 0,
       tags: nil,
-      description: nil
+      description: nil,
+      hackMDURL: nil
     )
 
     #expect(wrapper.dateInterval != nil)
@@ -54,7 +55,8 @@ struct SessionWrapperTests {
       speaker: "Test Speaker",
       speakerID: 0,
       tags: nil,
-      description: nil
+      description: nil,
+      hackMDURL: nil
     )
 
     #expect(wrapper.dateInterval != nil)
@@ -103,7 +105,8 @@ struct SessionWrapperTests {
         speaker: "Test Speaker",
         speakerID: 0,
         tags: nil,
-        description: nil
+        description: nil,
+        hackMDURL: nil
       )
 
       #expect(wrapper.dateInterval == nil, "Expected nil for invalid format: \(invalidFormat)")
@@ -154,7 +157,8 @@ struct SessionWrapperTests {
         speaker: "Test Speaker",
         speakerID: 0,
         tags: nil,
-        description: nil
+        description: nil,
+        hackMDURL: nil
       )
 
       #expect(wrapper.dateInterval != nil, "Expected successful parsing for format: \(format)")
@@ -184,7 +188,8 @@ struct SessionWrapperTests {
       speaker: "Night Owl",
       speakerID: 0,
       tags: nil,
-      description: nil
+      description: nil,
+      hackMDURL: nil
     )
 
     #expect(wrapper.dateInterval != nil)
@@ -216,17 +221,72 @@ struct SessionWrapperTests {
     return calendar.date(from: components)!
   }
 
-  private func createMockSession(time: String) -> Session {
-    let jsonString = """
-      {
-        "time": "\(time)",
-        "title": "Mock Session",
-        "tags": ["test"],
-        "speaker": "Mock Speaker",
-        "speakerID": 0,
-        "description": "Mock Description"
-      }
-      """
+  @Test("Initialize SessionWrapper with hackMD URL")
+  func initializeSessionWrapperWithHackMDURL() {
+    let hackMDURL = URL(string: "https://hackmd.io/@iPlayground/test")!
+    let date = createDate(year: 2025, month: 8, day: 30)
+
+    let wrapper = SessionWrapper(
+      date: date,
+      timeRange: "11:30 - 11:50",
+      title: "Test Session",
+      speaker: "Test Speaker",
+      speakerID: 0,
+      tags: nil,
+      description: nil,
+      hackMDURL: hackMDURL
+    )
+
+    #expect(wrapper.hackMDURL == hackMDURL)
+  }
+
+  @Test("Initialize SessionWrapper from Session with hackMD")
+  func initializeFromSessionWithHackMD() {
+    let hackMDURL = URL(string: "https://hackmd.io/@iPlayground/session123")!
+    let session = createMockSession(time: "14:15 - 15:05", hackMD: hackMDURL)
+    let date = createDate(year: 2025, month: 8, day: 30)
+
+    let wrapper = SessionWrapper(date: date, session: session)
+
+    #expect(wrapper.hackMDURL == hackMDURL)
+  }
+
+  @Test("Initialize SessionWrapper from Session without hackMD")
+  func initializeFromSessionWithoutHackMD() {
+    let session = createMockSession(time: "14:15 - 15:05", hackMD: nil)
+    let date = createDate(year: 2025, month: 8, day: 30)
+
+    let wrapper = SessionWrapper(date: date, session: session)
+
+    #expect(wrapper.hackMDURL == nil)
+  }
+
+  private func createMockSession(time: String, hackMD: URL? = nil) -> Session {
+    let jsonString: String
+    if let hackMD = hackMD {
+      jsonString = """
+        {
+          "time": "\(time)",
+          "title": "Mock Session",
+          "tags": ["test"],
+          "speaker": "Mock Speaker",
+          "speakerID": 0,
+          "description": "Mock Description",
+          "hackMD": "\(hackMD.absoluteString)"
+        }
+        """
+    } else {
+      jsonString = """
+        {
+          "time": "\(time)",
+          "title": "Mock Session",
+          "tags": ["test"],
+          "speaker": "Mock Speaker",
+          "speakerID": 0,
+          "description": "Mock Description"
+        }
+        """
+    }
 
     let jsonData = jsonString.data(using: .utf8)!
     let decoder = JSONDecoder()

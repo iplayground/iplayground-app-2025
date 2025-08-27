@@ -213,7 +213,8 @@ final class TodayFeatureTests: XCTestCase {
         speaker: speaker,
         speakerID: 0,
         tags: nil,
-        description: "Test description"
+        description: "Test description",
+        hackMDURL: nil
       )
     }
   }
