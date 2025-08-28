@@ -59,6 +59,8 @@ struct NowWidget: Widget {
   let day2Wrappers = Provider.convertSessions(schedule.day2, date: day2Date)
   let allSessions = day1Wrappers + day2Wrappers
   let entries = Provider.convertSessionWrappers(allSessions)
+
+  // This is for Widget preview builder syntax; can't just use `entries`
   for entry in entries {
     entry
   }

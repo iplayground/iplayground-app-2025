@@ -98,22 +98,6 @@ struct Provider: TimelineProvider {
             )
           ))
       }
-
-
-//      // Entry at session end (for transitions)
-//      let currentAtEnd = findCurrentSession(from: allSessions, at: dateInterval.end)
-//      let nextAtEnd = findNextSession(from: allSessions, after: dateInterval.end)
-//      let nextNextAtEnd = findNextNextSession(from: allSessions, after: nextAtEnd)
-//
-//      entries.append(
-//        NowEntry(
-//          date: dateInterval.end,
-//          phase: .duringEvent(
-//            currentSession: currentAtEnd,
-//            nextSession: nextAtEnd,
-//            nextNextSession: nextNextAtEnd
-//          )
-//        ))
     }
 
     // After event ends
