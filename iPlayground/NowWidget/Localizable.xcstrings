@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "zh-Hant",
   "strings" : {
+    "iPlayground" : {
+      "shouldTranslate" : false
+    },
     "iPlayground 倒數中：%@" : {
       "localizations" : {
         "en" : {
@@ -85,8 +88,21 @@
         }
       }
     },
-    "現在議程" : {
-
+    "議程與活動" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セッション"
+          }
+        }
+      }
     },
     "進行中：%@%@（剩餘：%@）" : {
       "comment" : "進行中的講題、講者，以及剩餘時間",
@@ -110,9 +126,6 @@
           }
         }
       }
-    },
-    "顯示目前進行中的議程資訊" : {
-
     }
   },
   "version" : "1.0"
