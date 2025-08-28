@@ -1,18 +1,18 @@
 import Foundation
 @_exported import SessionData
 
-package struct SessionWrapper: Identifiable, Equatable {
-  package let id = UUID()
-  package let timeRange: String
-  package let dateInterval: DateInterval?
-  package let title: String
-  package let speaker: String
-  package let speakerID: Speaker.ID?
-  package let tags: String?
-  package let description: String?
-  package let hackMDURL: URL?
+public struct SessionWrapper: Identifiable, Equatable, Hashable, Sendable {
+  public let id = UUID()
+  public let timeRange: String
+  public let dateInterval: DateInterval?
+  public let title: String
+  public let speaker: String
+  public let speakerID: Speaker.ID?
+  public let tags: String?
+  public let description: String?
+  public let hackMDURL: URL?
 
-  package init(
+  public init(
     date: Date,
     timeRange: String,
     title: String,
@@ -32,7 +32,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.hackMDURL = hackMDURL
   }
 
-  package init(date: Date, session: Session) {
+  public init(date: Date, session: Session) {
     self.timeRange = session.time
     self.dateInterval = Self.parseDateInterval(from: session.time, baseDate: date)
     self.title = session.title
@@ -43,7 +43,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.hackMDURL = session.hackMD
   }
 
-  package init(session: Session) {
+  public init(session: Session) {
     self.timeRange = session.time
     self.dateInterval = nil
     self.title = session.title
@@ -54,7 +54,7 @@ package struct SessionWrapper: Identifiable, Equatable {
     self.hackMDURL = session.hackMD
   }
 
-  package init(
+  public init(
     timeRange: String,
     title: String,
     speaker: String,

@@ -10,7 +10,7 @@ let appName = "App"
 let sessionData = SourceControlDependency(
   package: .package(
     url: "https://github.com/iplayground/SessionData",
-    exact: "2025.1.2"
+    exact: "2025.1.4"
   ),
   productName: "SessionData"
 )
@@ -24,6 +24,13 @@ let tca = SourceControlDependency(
 let swiftDependencies = Package.Dependency.package(
   url: "https://github.com/pointfreeco/swift-dependencies",
   from: "1.9.2"
+)
+let identifiedCollections = SourceControlDependency(
+  package: .package(
+    url: "https://github.com/pointfreeco/swift-identified-collections",
+    exact: "1.1.1"
+  ),
+  productName: "IdentifiedCollections"
 )
 let dependencies = SourceControlDependency(
   package: swiftDependencies,
@@ -55,6 +62,7 @@ let dependencyClients = SingleTargetLibrary(
     dependencies.targetDependency,
     dependenciesMacros.targetDependency,
     models.targetDependency,
+    identifiedCollections.targetDependency,
   ]
 )
 let features = SingleTargetLibrary(
@@ -110,6 +118,7 @@ let package = Package(
   ],
   dependencies: [
     tca.package,
+    identifiedCollections.package,
     swiftDependencies,
     sessionData.package,
     flitto.package,

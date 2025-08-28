@@ -47,10 +47,8 @@ package struct TodayFeature {
     }
 
     package var nextSession: SessionWrapper? {
-      guard let date = currentSession?.dateInterval?.end else {
-        return nil
-      }
-      return allSessions.first { $0.dateInterval?.start ?? .distantFuture >= date }
+      @Dependency(\.date.now) var now
+      return allSessions.first { ($0.dateInterval?.start ?? .distantFuture) > now }
     }
 
     package var nextNextSession: SessionWrapper? {

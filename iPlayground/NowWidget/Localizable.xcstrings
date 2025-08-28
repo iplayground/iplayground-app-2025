@@ -1,0 +1,86 @@
+{
+  "sourceLanguage" : "zh-Hant",
+  "strings" : {
+    "%@\n%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@\n%2$@"
+          }
+        }
+      }
+    },
+    "%@ %@\n%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@\n%3$@"
+          }
+        }
+      }
+    },
+    "%@ %@%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@%3$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "👉 %@%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "👉 %1$@%2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "2025" : {
+
+    },
+    "iPlayground" : {
+      "shouldTranslate" : false
+    },
+    "今年的活動已結束，感謝您的參與！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The conference is over. Thanks for joining us!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今年のカンファレンスは終了しました。ご参加いただきありがとうございました！"
+          }
+        }
+      }
+    },
+    "議程與活動" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セッション"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -81,23 +81,51 @@ package struct HomeFeature {
         await withThrowingTaskGroup(of: Void.self) { group in
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let speakers = try await client.fetchSpeakers(.remote)
-            await send(.binding(.set(\.speakers, speakers)))
+            let cachedSpeakers = try await client.fetchSpeakers(.cacheFirst)
+            async let remoteSpeakers = try await client.fetchSpeakers(.remote)
+
+            await send(.binding(.set(\.speakers, cachedSpeakers)))
+
+            let speakers = try await remoteSpeakers
+            if speakers != cachedSpeakers {
+              await send(.binding(.set(\.speakers, speakers)))
+            }
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let sponsorData = try await client.fetchSponsors(.remote)
-            await send(.binding(.set(\.sponsorData, sponsorData)))
+            let cachedSponsorData = try await client.fetchSponsors(.cacheFirst)
+            async let remoteSponsorData = try await client.fetchSponsors(.remote)
+
+            await send(.binding(.set(\.sponsorData, cachedSponsorData)))
+
+            let sponsorData = try await remoteSponsorData
+            if sponsorData != cachedSponsorData {
+              await send(.binding(.set(\.sponsorData, sponsorData)))
+            }
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let staffs = try await client.fetchStaffs(.remote)
-            await send(.binding(.set(\.staffs, staffs)))
+            let cachedStaffs = try await client.fetchStaffs(.cacheFirst)
+            async let remoteStaffs = try await client.fetchStaffs(.remote)
+
+            await send(.binding(.set(\.staffs, cachedStaffs)))
+
+            let staffs = try await remoteStaffs
+            if staffs != cachedStaffs {
+              await send(.binding(.set(\.staffs, staffs)))
+            }
           }
           group.addTask {
             @Dependency(\.iPlaygroundDataClient) var client
-            let links = try await client.fetchLinks(.remote)
-            await send(.binding(.set(\.links, links)))
+            let cachedLinks = try await client.fetchLinks(.cacheFirst)
+            async let remoteLinks = try await client.fetchLinks(.remote)
+
+            await send(.binding(.set(\.links, cachedLinks)))
+
+            let links = try await remoteLinks
+            if links != cachedLinks {
+              await send(.binding(.set(\.links, links)))
+            }
           }
         }
       }

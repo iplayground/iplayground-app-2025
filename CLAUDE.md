@@ -1,4 +1,13 @@
 # CLAUDE.md
+## Run Tests
+```
+xcodebuild test \
+  -workspace iPlayground/iPlayground.xcworkspace \
+  -scheme iPlayground \
+  -testPlan iPlayground \
+  -destination 'platform=iOS Simulator,name=iPhone 16,arch=arm64'
+```
+
 ## Git Workflow Rules
 - **When implementing a new feature**: ALWAYS create a new feature branch from `main`
 - **Feature branch naming**: Use descriptive names like `featureName`

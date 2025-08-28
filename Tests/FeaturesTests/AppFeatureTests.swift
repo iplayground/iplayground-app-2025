@@ -10,7 +10,11 @@ final class AppFeatureTests: XCTestCase {
       reducer: {
         AppFeature()
       }
-    )
+    ) {
+      $0.widgetClient.reloadTimelines = { widgetKind in
+        expectNoDifference(widgetKind, "NowWidget")
+      }
+    }
 
     await store.send(\.task)
   }
