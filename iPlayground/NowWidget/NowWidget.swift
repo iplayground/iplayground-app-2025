@@ -5,6 +5,7 @@
 //  Created by ethanhuang on 2025/8/28.
 //
 
+import Dependencies
 import Models
 import SwiftUI
 import WidgetKit
@@ -19,7 +20,7 @@ struct NowWidget: Widget {
     }
     .configurationDisplayName("iPlayground")
     .description(String(localized: "議程與活動"))
-    .supportedFamilies([.systemSmall, .systemMedium])
+    .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge])
   }
 }
 
@@ -36,40 +37,38 @@ struct NowWidget: Widget {
   )
 }
 
-#Preview("活動中", as: .systemSmall) {
+#Preview("活動中", as: .systemMedium) {
   NowWidget()
 } timeline: {
-  let duringEventDate = Calendar(identifier: .gregorian).date(
-    from: DateComponents(year: 2025, month: 8, day: 30, hour: 9, minute: 35))!
-
-  // Create sample sessions
-  let currentSession = SessionWrapper(
-    timeRange: "09:30 - 10:20",
-    title: "SwiftUI 與 Combine 實作",
-    speaker: "王小明",
-    speakerID: 1,
-    tags: "iOS · SwiftUI",
-    description: "介紹如何使用 SwiftUI 和 Combine 建構現代 iOS 應用程式",
-    hackMDURL: nil
-  )
-
-  let nextSession = SessionWrapper(
-    timeRange: "10:30 - 11:20",
-    title: "Metal 效能優化技巧",
-    speaker: "李小華",
-    speakerID: 2,
-    tags: "iOS · Metal",
-    description: "深入探討 Metal 框架的效能優化策略",
-    hackMDURL: nil
-  )
+  let eventStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(8 * 3600)
+  let beforeEventDate = Calendar(identifier: .gregorian).date(
+    from: DateComponents(year: 2025, month: 8, day: 29, hour: 9, minute: 0))!
 
   NowEntry(
-    date: duringEventDate,
-    phase: .duringEvent(
-      currentSession: currentSession,
-      nextSession: nextSession,
-      nextNextSession: nil
-    )
+    date: beforeEventDate,
+    phase: .beforeEvent(eventStartDate: eventStartDate)
+  )
+
+  let url = Bundle.sessionData.url(
+    forResource: "schedule", withExtension: "json")!
+  let data = try! Data(contentsOf: url)
+  let schedule = try! JSONDecoder().decode(Schedule.self, from: data)
+  let day1Date = createDate(year: 2025, month: 8, day: 30)
+  let day1Wrappers = Provider.convertSessions(schedule.day1, date: day1Date)
+  let day2Date = createDate(year: 2025, month: 8, day: 31)
+  let day2Wrappers = Provider.convertSessions(schedule.day2, date: day2Date)
+  let allSessions = day1Wrappers + day2Wrappers
+  let entries = Provider.convertSessionWrappers(allSessions)
+  for entry in entries {
+    entry
+  }
+
+  let afterEventDate = Calendar(identifier: .gregorian).date(
+    from: DateComponents(year: 2025, month: 8, day: 31, hour: 18, minute: 0))!
+
+  NowEntry(
+    date: afterEventDate,
+    phase: .afterEvent
   )
 }
 

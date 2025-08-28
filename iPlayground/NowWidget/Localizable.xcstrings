@@ -1,30 +1,33 @@
 {
   "sourceLanguage" : "zh-Hant",
   "strings" : {
+    "%@ %@%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@%3$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "👉 %@%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "👉 %1$@%2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "iPlayground" : {
       "shouldTranslate" : false
     },
-    "iPlayground 倒數中：%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPlayground 2025 Countdown: %@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPlayground 2025 カウントダウン: %@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPlayground 2025 倒數中：%@"
-          }
-        }
-      }
+    "iPlayground 2025\n%@" : {
+      "shouldTranslate" : false
     },
     "今年的活動已結束，感謝您的參與！" : {
       "localizations" : {
@@ -42,52 +45,6 @@
         }
       }
     },
-    "再接下來：%@ %@%@" : {
-      "comment" : "再接下來的時段、講題、講者",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Up Next: %1$@ %2$@%3$@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次の予定: %1$@ %2$@%3$@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "再接下來：%1$@ %2$@%3$@"
-          }
-        }
-      }
-    },
-    "接下來：%@ %@%@" : {
-      "comment" : "接下來的時段、講題、講者",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next: %1$@ %2$@%3$@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次: %1$@ %2$@%3$@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "接下來：%1$@ %2$@%3$@"
-          }
-        }
-      }
-    },
     "議程與活動" : {
       "localizations" : {
         "en" : {
@@ -100,29 +57,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "セッション"
-          }
-        }
-      }
-    },
-    "進行中：%@%@（剩餘：%@）" : {
-      "comment" : "進行中的講題、講者，以及剩餘時間",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Now: %1$@%2$@ (Remaining: %3$@)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在: %1$@%2$@（残り: %3$@）"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在：%1$@%2$@（剩餘：%3$@）"
           }
         }
       }
