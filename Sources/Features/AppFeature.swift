@@ -27,7 +27,10 @@ package struct AppFeature {
   package func core(state: inout State, action: Action) -> Effect<Action> {
     switch action {
     case .task:
-      return .none
+      return .run { _ in
+        @Dependency(\.widgetClient) var widgetClient
+        widgetClient.reloadTimelines("NowWidget")
+      }
 
     case .home:
       return .none
