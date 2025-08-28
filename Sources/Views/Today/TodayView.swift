@@ -102,20 +102,22 @@ struct TodayView: View {
           Text("今年的活動已結束，感謝您的參與！", bundle: .module)
           Spacer()
         }
-      } else if let currentSession = store.currentSession {
+      } else {
         // 情況 3：活動進行中
         HStack {
           VStack(alignment: .leading) {
-            let duration = Duration.seconds(
-              currentSession.dateInterval?.end.timeIntervalSince(now) ?? 0)
-            Text(verbatim: "・")
-              + Text(
-                """
-                進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
-                """,
-                bundle: .module
-              )
-              .foregroundStyle(Color(.iPlaygroundYellow))
+            if let currentSession = store.currentSession {
+              let duration = Duration.seconds(
+                currentSession.dateInterval?.end.timeIntervalSince(now) ?? 0)
+              Text(verbatim: "・")
+                + Text(
+                  """
+                  進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
+                  """,
+                  bundle: .module
+                )
+                .foregroundStyle(Color(.iPlaygroundYellow))
+            }
 
             if let nextSession = store.nextSession {
               Text(verbatim: "・")
@@ -258,6 +260,22 @@ extension TodayFeature.State.Day {
     $0.date.now = {
       let date = Calendar(identifier: .gregorian).date(
         from: DateComponents(year: 2025, month: 8, day: 30, hour: 9, minute: 35))!
+      return date
+    }()
+  }
+  TodayView(
+    store: .init(
+      initialState: TodayFeature.State(),
+      reducer: { TodayFeature() }
+    )
+  )
+}
+
+#Preview("活動中 - Day 1 與 2 之間") {
+  let _ = prepareDependencies {
+    $0.date.now = {
+      let date = Calendar(identifier: .gregorian).date(
+        from: DateComponents(year: 2025, month: 8, day: 30, hour: 20, minute: 35))!
       return date
     }()
   }
