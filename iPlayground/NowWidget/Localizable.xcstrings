@@ -1,6 +1,26 @@
 {
   "sourceLanguage" : "zh-Hant",
   "strings" : {
+    "%@\n%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@\n%2$@"
+          }
+        }
+      }
+    },
+    "%@ %@\n%@" : {
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@\n%3$@"
+          }
+        }
+      }
+    },
     "%@ %@%@" : {
       "localizations" : {
         "zh-Hant" : {
@@ -23,10 +43,10 @@
       },
       "shouldTranslate" : false
     },
-    "iPlayground" : {
-      "shouldTranslate" : false
+    "2025" : {
+
     },
-    "iPlayground 2025\n%@" : {
+    "iPlayground" : {
       "shouldTranslate" : false
     },
     "今年的活動已結束，感謝您的參與！" : {

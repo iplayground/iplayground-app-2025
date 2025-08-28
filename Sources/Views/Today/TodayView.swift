@@ -56,7 +56,7 @@ struct TodayView: View {
             )
             .buttonStyle(.plain)
             .padding()
-            .background(Material.regular)
+            .background(Color(.widgetBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .padding(.horizontal)
             .padding(.bottom)
@@ -89,17 +89,26 @@ struct TodayView: View {
       // 情況 1：活動開始之前
       if now < startDate {
         HStack {
-          let duration = Duration.seconds(startDate.timeIntervalSince(now))
           Text(
-            "iPlayground 倒數中：\(Text(duration.formatted(.units(allowed: [.days, .hours, .minutes],width: .narrow))))",
-            bundle: .module
+            """
+            \(Text(verbatim: "iPlayground").foregroundStyle(Color(.iPlaygroundBlue))) \(Text(verbatim: "2025").foregroundStyle(Color(.iPlaygroundYellow)))
+            \(Text(startDate, style: .relative).foregroundStyle(Color(.iPlaygroundPink)))
+            """
           )
+          .font(.headline)
           Spacer()
         }
       } else if now > endDate {
         // 情況 2：活動已結束
         HStack {
-          Text("今年的活動已結束，感謝您的參與！", bundle: .module)
+          Text(
+            """
+            \(Text(verbatim: "iPlayground").foregroundStyle(Color(.iPlaygroundBlue))) \(Text(verbatim: "2025").foregroundStyle(Color(.iPlaygroundYellow)))
+            \(Text("今年的活動已結束，感謝您的參與！", bundle: .module).foregroundStyle(Color(.iPlaygroundPink)))
+            """
+          )
+          .font(.headline)
+          .multilineTextAlignment(.leading)
           Spacer()
         }
       } else {
@@ -109,32 +118,32 @@ struct TodayView: View {
             if let currentSession = store.currentSession {
               let duration = Duration.seconds(
                 currentSession.dateInterval?.end.timeIntervalSince(now) ?? 0)
-              Text(verbatim: "・")
-                + Text(
-                  """
-                  進行中：\(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
-                  """,
-                  bundle: .module
-                )
-                .foregroundStyle(Color(.iPlaygroundYellow))
+              Text(
+                """
+                👉 \(currentSession.title)\(currentSession.speaker.isEmpty ? "" : " - \(currentSession.speaker)")（剩餘：\(Text(duration.formatted(.units(allowed: [.hours, .minutes], width: .narrow))))）
+                """,
+                bundle: .module
+              )
+              .font(.headline)
+              .foregroundStyle(Color(.iPlaygroundBlue))
             }
 
             if let nextSession = store.nextSession {
-              Text(verbatim: "・")
-                + Text(
-                  "接下來：\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
-                  bundle: .module
-                )
-                .foregroundStyle(Color(.iPlaygroundPink))
+              Text(
+                "\(Text(nextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextSession.title)\(nextSession.speaker.isEmpty ? "" : " - \(nextSession.speaker)")",
+                bundle: .module
+              )
+              .font(.subheadline)
+              .foregroundStyle(Color(.iPlaygroundPink))
             }
 
             if let nextNextSession = store.nextNextSession {
-              Text(verbatim: "・")
-                + Text(
-                  "再接下來：\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
-                  bundle: .module
-                )
-                .foregroundStyle(Color(.iPlaygroundBlue))
+              Text(
+                "\(Text(nextNextSession.dateInterval?.start.formatted(date: .omitted, time: .shortened) ?? "")) \(nextNextSession.title)\(nextNextSession.speaker.isEmpty ? "" : " - \(nextNextSession.speaker)")",
+                bundle: .module
+              )
+              .font(.subheadline)
+              .foregroundStyle(Color(.iPlaygroundYellow))
             }
           }
           Spacer()
