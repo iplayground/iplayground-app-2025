@@ -12,6 +12,73 @@ package struct LiveTranslationFeature {
   private enum CancelID {
     case stream
   }
+
+  private static let localeMapping: [String: String] = [
+    // Chinese variants
+    "zh-Hant": "zh-TW",  // Traditional Chinese
+    "zh-Hant-TW": "zh-TW",
+    "zh-Hant-HK": "zh-TW",
+    "zh-Hant-MO": "zh-TW",
+    "zh-Hans": "zh-CN",  // Simplified Chinese
+    "zh-Hans-CN": "zh-CN",
+    "zh": "zh-CN",  // Default Chinese maps to Simplified
+
+    // Cantonese
+    "yue": "yue",
+    "yue-Hant": "yue",
+    "zh-HK": "yue",  // Hong Kong commonly uses Cantonese
+
+    // Portuguese variants
+    "pt-BR": "pt-BR",  // Brazilian Portuguese
+    "pt": "pt",  // European Portuguese
+    "pt-PT": "pt",
+
+    // Japanese variants
+    "ja-JP": "ja",  // Japan Japanese
+
+    // Korean variants
+    "ko-KR": "ko",  // South Korea Korean
+
+    // Direct mappings for other languages
+    "ar": "ar",
+    "hr": "hr",
+    "cs": "cs",
+    "nl": "nl",
+    "en": "en",
+    "fi": "fi",
+    "fr": "fr",
+    "de": "de",
+    "el": "el",
+    "he": "he",
+    "hi": "hi",
+    "hu": "hu",
+    "id": "id",
+    "it": "it",
+    "ja": "ja",
+    "km": "km",
+    "ko": "ko",
+    "ms": "ms",
+    "mn": "mn",
+    "fa": "fa",
+    "pl": "pl",
+    "ro": "ro",
+    "ru": "ru",
+    "sk": "sk",
+    "es": "es",
+    "sw": "sw",
+    "sv": "sv",
+    "tl": "tl",
+    "th": "th",
+    "tr": "tr",
+    "uk": "uk",
+    "uz": "uz",
+    "vi": "vi",
+    "ne": "ne",
+    "ta": "ta",
+    "ur": "ur",
+    "si": "si",
+    "lo": "lo",
+  ]
   @ObservableState
   package struct State: Equatable {
     package var chatList: [CompositeChatItem] = []
@@ -51,6 +118,7 @@ package struct LiveTranslationFeature {
     case processChatQueue
     case processTranslationQueue
     case requestTranslation([CompositeChatItem])
+    case setInitialLanguage(String)
     case initialLoadingCompleted
     case errorOccurred(String)
 
@@ -86,7 +154,17 @@ package struct LiveTranslationFeature {
     case let .langListLoaded(langList):
       state.langList = langList
       state.hasLoadedLangList = true
-      return checkIfLoadingCompleted(state: &state)
+
+      // Set initial language based on user's locale
+      let initialLanguage = Self.determineInitialLanguage(from: langList)
+      if initialLanguage != state.selectedLangCode {
+        return .concatenate([
+          .send(.setInitialLanguage(initialLanguage)),
+          checkIfLoadingCompleted(state: &state),
+        ])
+      } else {
+        return checkIfLoadingCompleted(state: &state)
+      }
 
     case let .chatRoomInfoLoaded(roomInfo):
       state.roomInfo = roomInfo
@@ -205,6 +283,20 @@ package struct LiveTranslationFeature {
       }
 
       return .send(.processTranslationQueue)
+
+    case let .setInitialLanguage(langCode):
+      state.selectedLangCode = langCode
+
+      // Load language set for the new language
+      return .run { send in
+        @Dependency(\.liveTranslationClient) var client
+        do {
+          let langSet = try await client.getLangSet(langCode)
+          await send(.langSetLoaded(langSet))
+        } catch {
+          logger.error("Failed to load language set for initial language \(langCode): \(error)")
+        }
+      }
 
     case let .requestTranslation(chatItems):
       return .run { [selectedLangCode = state.selectedLangCode] send in
@@ -346,5 +438,34 @@ package struct LiveTranslationFeature {
       return .send(.initialLoadingCompleted)
     }
     return .none
+  }
+
+  private static func determineInitialLanguage(from langList: [LanguageItem]) -> String {
+    let preferredLanguageID = Locale.preferredLanguages.first ?? "en"
+    let availableCodes = Set(langList.map { $0.langCode })
+
+    // 1. Try exact match with preferred language
+    if availableCodes.contains(preferredLanguageID) {
+      return preferredLanguageID
+    }
+
+    // 2. Look up mapping table with preferred language
+    if let mapped = localeMapping[preferredLanguageID], availableCodes.contains(mapped) {
+      return mapped
+    }
+
+    // 3. Extract base language code from preferred language (e.g., "ja" from "ja-JP")
+    let baseLanguageCode = String(preferredLanguageID.prefix(2))
+    if availableCodes.contains(baseLanguageCode) {
+      return baseLanguageCode
+    }
+
+    // 4. Look up base language code mapping
+    if let mapped = localeMapping[baseLanguageCode], availableCodes.contains(mapped) {
+      return mapped
+    }
+
+    // 5. Default to English
+    return "en"
   }
 }

@@ -42,6 +42,11 @@ final class LiveTranslationFeatureTests: XCTestCase {
       reducer: { LiveTranslationFeature() }
     )
 
+    // Mock the live translation client to avoid dependency issues
+    store.dependencies.liveTranslationClient.getLangSet = { langCode in
+      LangSet(data: [langCode: "Test Language"])
+    }
+
     let langList = [
       LanguageItem(id: "en", langCode: "en", name: "English"),
       LanguageItem(id: "zh", langCode: "zh", name: "中文"),
@@ -51,6 +56,9 @@ final class LiveTranslationFeatureTests: XCTestCase {
       $0.langList = langList
       $0.hasLoadedLangList = true
     }
+
+    // Skip the automatic language matching actions since they depend on device locale
+    await store.skipReceivedActions()
   }
 
   func testChatRoomInfoLoaded() async {
@@ -74,6 +82,11 @@ final class LiveTranslationFeatureTests: XCTestCase {
       reducer: { LiveTranslationFeature() }
     )
 
+    // Mock the live translation client
+    store.dependencies.liveTranslationClient.getLangSet = { langCode in
+      LangSet(data: [langCode: "Test Language"])
+    }
+
     let langSet = LangSet(data: ["en": "English", "zh": "中文"])
     let langList = [
       LanguageItem(id: "en", langCode: "en", name: "English"),
@@ -91,6 +104,9 @@ final class LiveTranslationFeatureTests: XCTestCase {
       $0.langList = langList
       $0.hasLoadedLangList = true
     }
+
+    // Skip language matching actions
+    await store.skipReceivedActions()
 
     await store.send(\.chatRoomInfoLoaded, roomInfo) {
       $0.roomInfo = roomInfo
@@ -206,6 +222,28 @@ final class LiveTranslationFeatureTests: XCTestCase {
     await store.send(\.errorOccurred, "Test error") {
       $0.errorMessage = "Test error"
       $0.isLoading = false
+    }
+  }
+
+  func testSetInitialLanguage() async {
+    let store = TestStore(
+      initialState: LiveTranslationFeature.State(),
+      reducer: { LiveTranslationFeature() }
+    )
+
+    // Mock the live translation client
+    store.dependencies.liveTranslationClient.getLangSet = { langCode in
+      LangSet(data: [langCode: "Test Language"])
+    }
+
+    await store.send(\.setInitialLanguage, "zh-TW") {
+      $0.selectedLangCode = "zh-TW"
+    }
+
+    // Should receive langSetLoaded with the new language
+    await store.receive(\.langSetLoaded) {
+      $0.langSet = LangSet(data: ["zh-TW": "Test Language"])
+      $0.hasLoadedLangSet = true
     }
   }
 }

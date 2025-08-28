@@ -95,6 +95,20 @@ package struct LiveTranslationView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 
+  // XXX: SwiftUI doesn't correctly support RTL languages, so we need to manually set the layout direction.
+  private var isRTL: Bool {
+    let rtlLanguages = [
+      "ar",  // Arabic
+      "he",  // Hebrew
+      "fa",  // Persian/Farsi
+      "ur",  // Urdu
+      "yi",  // Yiddish
+      "ji",  // Yiddish (old code)
+      "iw",  // Hebrew (old code)
+    ]
+    return rtlLanguages.contains(store.selectedLangCode)
+  }
+
   @ViewBuilder
   private var messageList: some View {
     ScrollView {
@@ -107,6 +121,7 @@ package struct LiveTranslationView: View {
         }
       }
     }
+    .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
   }
 
   @ViewBuilder
