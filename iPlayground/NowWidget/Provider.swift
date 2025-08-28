@@ -32,6 +32,52 @@ struct Provider: TimelineProvider {
     completion(entry)
   }
 
+  func getTimeline(in context: Context, completion: @escaping (Timeline<NowEntry>) -> Void) {
+    Task {
+      let result: Timeline<NowEntry>
+
+      defer {
+        completion(result)
+      }
+
+      @Dependency(\.iPlaygroundDataClient) var client
+      @Dependency(\.date.now) var now
+
+      do {
+        // Fetch sessions for both days
+        let (day1Sessions, day2Sessions) = try await Self.fetchSessions()
+        let day1Date = createDate(year: 2025, month: 8, day: 30)
+        let day1Wrappers = Self.convertSessions(day1Sessions, date: day1Date)
+        let day2Date = createDate(year: 2025, month: 8, day: 31)
+        let day2Wrappers = Self.convertSessions(day2Sessions, date: day2Date)
+        let allSessions = day1Wrappers + day2Wrappers
+
+        var entries: [NowEntry] = []
+
+        if let eventStartDate = allSessions.first?.dateInterval?.start {
+          let before = NowEntry(date: now, phase: .beforeEvent(eventStartDate: eventStartDate))
+          entries.append(before)
+        }
+
+        entries.append(contentsOf: Self.convertSessionWrappers(allSessions))
+
+        if let eventEndDate = allSessions.last?.dateInterval?.end {
+          let after = NowEntry(date: eventEndDate, phase: .afterEvent)
+          entries.append(after)
+        }
+
+        result = Timeline(entries: entries, policy: .atEnd)
+      } catch {
+        // Fallback entry on error
+        let fallbackStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(
+          9 * 3600)
+        let entry = NowEntry(date: now, phase: .beforeEvent(eventStartDate: fallbackStartDate))
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        result = timeline
+      }
+    }
+  }
+
   static func fetchSessions() async throws -> ([Session], [Session]) {
     @Dependency(\.iPlaygroundDataClient) var client
     let day1Sessions = try await client.fetchSchedules(1, .cacheFirst)
@@ -46,26 +92,7 @@ struct Provider: TimelineProvider {
   static func convertSessionWrappers(_ allSessions: [SessionWrapper]) -> [NowEntry] {
     @Dependency(\.date.now) var now
 
-    guard let eventStartDate = allSessions.first?.dateInterval?.start,
-          let eventEndDate = allSessions.last?.dateInterval?.end
-    else {
-      // Fallback entry if no sessions available
-      let fallbackStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(
-        9 * 3600)
-      let entry = NowEntry(date: now, phase: .beforeEvent(eventStartDate: fallbackStartDate))
-      return [entry]
-    }
-
     var entries: [NowEntry] = []
-
-    // Before event starts
-    if now < eventStartDate {
-      entries.append(
-        NowEntry(
-          date: now,
-          phase: .beforeEvent(eventStartDate: eventStartDate)
-        ))
-    }
 
     // Generate entries for all session start and end times
     for session in allSessions {
@@ -87,7 +114,8 @@ struct Provider: TimelineProvider {
         ))
 
       if let nextStart = nextSession?.dateInterval?.start,
-         nextStart != dateInterval.end {
+        nextStart != dateInterval.end
+      {
         entries.append(
           NowEntry(
             date: dateInterval.end,
@@ -100,53 +128,11 @@ struct Provider: TimelineProvider {
       }
     }
 
-    // After event ends
-    entries.append(
-      NowEntry(
-        date: eventEndDate,
-        phase: .afterEvent
-      ))
-
-    // Remove duplicates and sort by date
-    entries = Array(Set(entries)).sorted { $0.date < $1.date }
-
     // Filter entries to only include future ones
-    let futureEntries = entries.filter { $0.date >= now }
-    let finalEntries = futureEntries.isEmpty ? [entries.last].compactMap { $0 } : futureEntries
-
+    let finalEntries = entries
+      .sorted(using: KeyPathComparator(\.date))
+      .filter { $0.date >= now }
     return finalEntries
-  }
-
-  func getTimeline(in context: Context, completion: @escaping (Timeline<NowEntry>) -> Void) {
-    Task {
-      let result: Timeline<NowEntry>
-
-      defer {
-        completion(result)
-      }
-
-      @Dependency(\.iPlaygroundDataClient) var client
-
-      do {
-        // Fetch sessions for both days
-        let (day1Sessions, day2Sessions) = try await Self.fetchSessions()
-        let day1Date = createDate(year: 2025, month: 8, day: 30)
-        let day1Wrappers = Self.convertSessions(day1Sessions, date: day1Date)
-        let day2Date = createDate(year: 2025, month: 8, day: 31)
-        let day2Wrappers = Self.convertSessions(day2Sessions, date: day2Date)
-        let allSessions = day1Wrappers + day2Wrappers
-        let entries = Self.convertSessionWrappers(allSessions)
-        result = Timeline(entries: entries, policy: .atEnd)
-      } catch {
-        @Dependency(\.date.now) var now
-        // Fallback entry on error
-        let fallbackStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(
-          9 * 3600)
-        let entry = NowEntry(date: now, phase: .beforeEvent(eventStartDate: fallbackStartDate))
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
-        result = timeline
-      }
-    }
   }
 }
 
