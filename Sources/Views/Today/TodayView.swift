@@ -187,11 +187,11 @@ struct TodayView: View {
           }
         )
         .listRowBackground(
-          Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
+          Color(.widgetBackground).opacity(session.id == currentSessionID ? 1.0 : 0))
       } else {
         sessionCell(session)
           .listRowBackground(
-            Color(.iPlaygroundYellow).opacity(session.id == currentSessionID ? 0.3 : 0))
+            Color(.widgetBackground).opacity(session.id == currentSessionID ? 1.0 : 0))
       }
     }
   }
