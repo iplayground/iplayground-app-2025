@@ -392,8 +392,9 @@ package struct LiveTranslationFeature {
       case let .changeLanguage(langCode):
         state.selectedLangCode = langCode
         state.isShowingLanguageSheet = false
-
-        let existingChatItems = state.chatList
+        
+        // Clear chat list when changing language
+        state.chatList = []
 
         return .run { send in
           @Dependency(\.liveTranslationClient) var client
@@ -406,10 +407,8 @@ package struct LiveTranslationFeature {
             logger.error("Failed to load language set for \(langCode): \(error)")
           }
 
-          // Request translations for existing chat items
-          if !existingChatItems.isEmpty {
-            await send(.requestTranslation(existingChatItems))
-          }
+          // Reconnect stream to get fresh data
+          await send(.view(.connectStream))
         }
 
       case .showLanguageSheet:
