@@ -21,7 +21,7 @@ package struct LiveTranslationFeature {
     "zh-Hant-MO": "zh-TW",
     "zh-Hans": "zh-CN",  // Simplified Chinese
     "zh-Hans-CN": "zh-CN",
-    "zh": "zh-CN",  // Default Chinese maps to Simplified
+    "zh": "zh-TW",  // Default Chinese maps to Traditional Chinese
 
     // Cantonese
     "yue": "yue",
@@ -392,7 +392,7 @@ package struct LiveTranslationFeature {
       case let .changeLanguage(langCode):
         state.selectedLangCode = langCode
         state.isShowingLanguageSheet = false
-        
+
         // Clear chat list when changing language
         state.chatList = []
 
