@@ -5,6 +5,8 @@ import SwiftUI
 @ViewAction(for: LiveTranslationFeature.self)
 package struct LiveTranslationView: View {
   @Bindable package var store: StoreOf<LiveTranslationFeature>
+  @State private var autoScroll = true
+  private let messageBottomID = "_messageBottom"
 
   package init(store: StoreOf<LiveTranslationFeature>) {
     self.store = store
@@ -111,17 +113,46 @@ package struct LiveTranslationView: View {
 
   @ViewBuilder
   private var messageList: some View {
-    ScrollView {
-      LazyVStack {
-        ForEach(store.chatList) { item in
-          Text(item.translatedText ?? item.text)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .multilineTextAlignment(.leading)
-            .padding()
+    ScrollViewReader { proxy in
+      ScrollView {
+        LazyVStack {
+          ForEach(store.chatList) { item in
+            Text(item.translatedText ?? item.text)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .multilineTextAlignment(.leading)
+              .padding()
+          }
         }
+        Text(verbatim: "\n\n\n\n\n\n")
+          .id(messageBottomID)
+      }
+      .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
+      .onChange(of: store.chatList) { oldValue, newValue in
+        autoScrollToBottomIfNeeded(proxy: proxy)
+      }
+      .overlay(alignment: .bottom) {
+        Button(
+          action: {
+            autoScroll.toggle()
+            autoScrollToBottomIfNeeded(proxy: proxy)
+          },
+          label: {
+            Image(systemName: autoScroll ? "arrow.down.circle.fill" : "arrow.down.circle")
+              .imageScale(.large)
+              .font(.largeTitle)
+              .padding()
+          }
+        )
       }
     }
-    .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
+  }
+
+  private func autoScrollToBottomIfNeeded(proxy: ScrollViewProxy) {
+    if autoScroll {
+      withAnimation(.spring) {
+        proxy.scrollTo(messageBottomID, anchor: .bottom)
+      }
+    }
   }
 
   @ViewBuilder
