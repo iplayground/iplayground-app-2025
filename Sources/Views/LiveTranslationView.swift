@@ -119,6 +119,8 @@ package struct LiveTranslationView: View {
             .multilineTextAlignment(.leading)
             .padding()
         }
+
+        Text(verbatim: "\n\n\n\n\n\n")
       }
     }
     .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
