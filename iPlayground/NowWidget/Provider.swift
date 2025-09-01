@@ -15,20 +15,13 @@ import WidgetKit
 struct Provider: TimelineProvider {
   func placeholder(in context: Context) -> NowEntry {
     @Dependency(\.date.now) var now
-    let eventStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(9 * 3600)
-    return NowEntry(
-      date: now,
-      phase: .beforeEvent(eventStartDate: eventStartDate)
-    )
+    let entry = NowEntry(date: now, phase: .afterEvent)
+    return entry
   }
 
   func getSnapshot(in context: Context, completion: @escaping (NowEntry) -> Void) {
     @Dependency(\.date.now) var now
-    let eventStartDate = createDate(year: 2025, month: 8, day: 30).addingTimeInterval(9 * 3600)
-    let entry = NowEntry(
-      date: now,
-      phase: .beforeEvent(eventStartDate: eventStartDate)
-    )
+    let entry = NowEntry(date: now, phase: .afterEvent)
     completion(entry)
   }
 
@@ -55,7 +48,8 @@ struct Provider: TimelineProvider {
         var entries: [NowEntry] = []
 
         if let eventStartDate = allSessions.first?.dateInterval?.start {
-          let before = NowEntry(date: now, phase: .beforeEvent(eventStartDate: eventStartDate))
+          let before = NowEntry(
+            date: eventStartDate, phase: .beforeEvent(eventStartDate: eventStartDate))
           entries.append(before)
         }
 
@@ -129,7 +123,8 @@ struct Provider: TimelineProvider {
     }
 
     // Filter entries to only include future ones
-    let finalEntries = entries
+    let finalEntries =
+      entries
       .sorted(using: KeyPathComparator(\.date))
       .filter { $0.date >= now }
     return finalEntries
