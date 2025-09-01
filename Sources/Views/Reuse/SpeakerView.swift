@@ -118,6 +118,7 @@ struct SpeakerView: View {
               .font(.subheadline)
               .foregroundColor(.secondary)
           }
+          .multilineTextAlignment(.leading)
           Spacer()
         }
       },
