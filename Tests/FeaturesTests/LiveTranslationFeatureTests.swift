@@ -194,7 +194,7 @@ final class LiveTranslationFeatureTests: XCTestCase {
     await store.send(.view(.changeLanguage("ja"))) {
       $0.selectedLangCode = "ja"
       $0.isShowingLanguageSheet = false
-      $0.chatList = [] // Chat list should be cleared
+      $0.chatList = []  // Chat list should be cleared
     }
 
     await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ja": "日本語"]))) {
@@ -204,7 +204,7 @@ final class LiveTranslationFeatureTests: XCTestCase {
 
     // Should connect stream to get fresh data
     await store.receive(.view(.connectStream))
-    
+
     // Cleanup
     await store.send(.view(.disconnectStream))
     await store.finish()
@@ -240,7 +240,8 @@ final class LiveTranslationFeatureTests: XCTestCase {
     await store.send(.view(.changeLanguage("ja"))) {
       $0.selectedLangCode = "ja"
       $0.isShowingLanguageSheet = false
-      $0.chatList = [] // Chat list should be cleared
+      $0.chatList = []  // Chat list should be cleared
+      $0.chatList = []  // Chat list should be cleared
     }
 
     await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ja": "日本語"]))) {
@@ -255,7 +256,7 @@ final class LiveTranslationFeatureTests: XCTestCase {
     await store.send(.view(.changeLanguage("zh"))) {
       $0.selectedLangCode = "zh"
       $0.isShowingLanguageSheet = false
-      $0.chatList = [] // Chat list should be cleared again
+      $0.chatList = []  // Chat list should be cleared again
     }
 
     await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "zh": "中文"]))) {
@@ -270,7 +271,7 @@ final class LiveTranslationFeatureTests: XCTestCase {
     await store.send(.view(.changeLanguage("ko"))) {
       $0.selectedLangCode = "ko"
       $0.isShowingLanguageSheet = false
-      $0.chatList = [] // Chat list should be cleared again
+      $0.chatList = []  // Chat list should be cleared again
     }
 
     await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ko": "한국어"]))) {
@@ -280,10 +281,10 @@ final class LiveTranslationFeatureTests: XCTestCase {
 
     // Should connect stream again
     await store.receive(.view(.connectStream))
-    
+
     // Cleanup: disconnect the stream to end the test properly
     await store.send(.view(.disconnectStream))
-    
+
     await store.finish()
   }
 
