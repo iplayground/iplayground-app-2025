@@ -8,7 +8,6 @@
 import Dependencies
 import DependenciesMacros
 import Foundation
-import WidgetKit
 
 @DependencyClient
 public struct WidgetClient: Sendable {
