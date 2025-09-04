@@ -47,7 +47,9 @@ struct Provider: TimelineProvider {
 
         var entries: [NowEntry] = []
 
-        if let eventStartDate = allSessions.first?.dateInterval?.start {
+        if let eventStartDate = allSessions.first?.dateInterval?.start,
+          now < eventStartDate
+        {
           let before = NowEntry(
             date: eventStartDate, phase: .beforeEvent(eventStartDate: eventStartDate))
           entries.append(before)
