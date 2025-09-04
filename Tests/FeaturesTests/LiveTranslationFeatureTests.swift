@@ -241,7 +241,6 @@ final class LiveTranslationFeatureTests: XCTestCase {
       $0.selectedLangCode = "ja"
       $0.isShowingLanguageSheet = false
       $0.chatList = []  // Chat list should be cleared
-      $0.chatList = []  // Chat list should be cleared
     }
 
     await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ja": "日本語"]))) {
