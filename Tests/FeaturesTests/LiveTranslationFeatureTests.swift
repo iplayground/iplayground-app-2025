@@ -186,20 +186,105 @@ final class LiveTranslationFeatureTests: XCTestCase {
           return LangSet(data: ["en": "English", "zh": "中文"])
         }
       }
-      $0.liveTranslationClient.requestBatchTranslation = { _ in }
+      $0.liveTranslationClient.chatConnection = { _ in
+        AsyncThrowingStream { _ in }
+      }
     }
 
-    await store.send(\.view, .changeLanguage("ja")) {
+    await store.send(.view(.changeLanguage("ja"))) {
       $0.selectedLangCode = "ja"
       $0.isShowingLanguageSheet = false
+      $0.chatList = []  // Chat list should be cleared
     }
 
-    await store.receive(\.langSetLoaded, LangSet(data: ["en": "English", "ja": "日本語"])) {
+    await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ja": "日本語"]))) {
       $0.langSet = LangSet(data: ["en": "English", "ja": "日本語"])
       $0.hasLoadedLangSet = true
     }
 
-    // Note: requestTranslation is not called when chatList is empty
+    // Should connect stream to get fresh data
+    await store.receive(.view(.connectStream))
+
+    // Cleanup
+    await store.send(.view(.disconnectStream))
+    await store.finish()
+  }
+
+  func testChangeLanguageMultipleTimes() async {
+    var initialState = LiveTranslationFeature.State()
+    initialState.isConnected = true  // Simulate being connected
+
+    let store = TestStore(
+      initialState: initialState,
+      reducer: { LiveTranslationFeature() }
+    ) {
+      $0.liveTranslationClient.getLangSet = { langCode in
+        switch langCode {
+        case "ja":
+          return LangSet(data: ["en": "English", "ja": "日本語"])
+        case "zh":
+          return LangSet(data: ["en": "English", "zh": "中文"])
+        case "ko":
+          return LangSet(data: ["en": "English", "ko": "한국어"])
+        default:
+          return LangSet(data: ["en": "English"])
+        }
+      }
+      $0.liveTranslationClient.requestBatchTranslation = { _ in }
+      $0.liveTranslationClient.chatConnection = { _ in
+        AsyncThrowingStream { _ in }
+      }
+    }
+
+    // First language change
+    await store.send(.view(.changeLanguage("ja"))) {
+      $0.selectedLangCode = "ja"
+      $0.isShowingLanguageSheet = false
+      $0.chatList = []  // Chat list should be cleared
+    }
+
+    await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ja": "日本語"]))) {
+      $0.langSet = LangSet(data: ["en": "English", "ja": "日本語"])
+      $0.hasLoadedLangSet = true
+    }
+
+    // Should connect stream to get fresh data
+    await store.receive(.view(.connectStream))
+
+    // Second language change
+    await store.send(.view(.changeLanguage("zh"))) {
+      $0.selectedLangCode = "zh"
+      $0.isShowingLanguageSheet = false
+      $0.chatList = []  // Chat list should be cleared again
+    }
+
+    await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "zh": "中文"]))) {
+      $0.langSet = LangSet(data: ["en": "English", "zh": "中文"])
+      $0.hasLoadedLangSet = true
+    }
+
+    // Should connect stream again
+    await store.receive(.view(.connectStream))
+
+    // Third language change
+    await store.send(.view(.changeLanguage("ko"))) {
+      $0.selectedLangCode = "ko"
+      $0.isShowingLanguageSheet = false
+      $0.chatList = []  // Chat list should be cleared again
+    }
+
+    await store.receive(.langSetLoaded(LangSet(data: ["en": "English", "ko": "한국어"]))) {
+      $0.langSet = LangSet(data: ["en": "English", "ko": "한국어"])
+      $0.hasLoadedLangSet = true
+    }
+
+    // Should connect stream again
+    await store.receive(.view(.connectStream))
+
+    // Cleanup: disconnect the stream to end the test properly
+    await store.send(.view(.disconnectStream))
+
+    await store.finish()
   }
 
   func testBindingAction() async {
