@@ -51,7 +51,7 @@ struct Provider: TimelineProvider {
           now < eventStartDate
         {
           let before = NowEntry(
-            date: eventStartDate, phase: .beforeEvent(eventStartDate: eventStartDate))
+            date: now, phase: .beforeEvent(eventStartDate: eventStartDate))
           entries.append(before)
         }
 
