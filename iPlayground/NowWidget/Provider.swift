@@ -129,7 +129,8 @@ struct Provider: TimelineProvider {
     }
 
     // Filter entries to only include future ones
-    let finalEntries = entries
+    let finalEntries =
+      entries
       .sorted(using: KeyPathComparator(\.date))
       .filter { $0.date >= now }
     return finalEntries
